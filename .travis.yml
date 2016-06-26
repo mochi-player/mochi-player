@@ -1,0 +1,47 @@
+sudo: required
+
+os:
+  - linux
+  - osx
+
+language: cpp
+
+compiler:
+  - gcc
+
+arch:
+  packages:
+    - qt5-{declarative,svg,x11extras,translations,tools,quickcontrols}
+    - xorg-server-xvfb
+    - noto-fonts
+    - youtube-dl
+    - luajit
+    - mpv-git
+  script:
+    - "qmake ."
+    - "make -j $(grep -c ^processor /proc/cpuinfo)"
+    - "xvfb-run  -s \"-screen 0 640x480x24\" make check"
+
+brew:
+  packages:
+    - youtube-dl
+    - mpv
+    - qt5
+  script:
+    - "export CXX=g++-4.8 CC=gcc-4.8 PKG_CONFIG_PATH=/usr/local/opt/qt5/lib/pkgconfig"
+    - "/usr/local/Cellar/qt5/5*/bin/qmake"
+    - "make"
+    - "make check"
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -s https://raw.githubusercontent.com/mochi-player/travis/master/arch-travis.sh | ARCH_TRAVIS_VERBOSE=1 bash; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl -s https://raw.githubusercontent.com/mochi-player/travis/master/brew-travis.sh | bash; fi
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/6a56faa67f77398d20fd
+    on_success: change
+    on_failure: always
+    on_start: never
+  email: false

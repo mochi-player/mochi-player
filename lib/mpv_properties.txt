@@ -1,0 +1,108 @@
+int loop // playlist looping
+bool loop-file // file looping
+double speed
+QString filename // just filename
+QString path // same string passed via loadfile
+QString media-title // title tag or filename
+double duration // estimated video duration
+double avsync // difference between audio and video
+double percent-pos // 0.0-100.0
+double playtime-remaining // duration factoring in speed
+int chapter // current chapter
+int chapters // number of chapters
+QVariantMap metadata
+QVariantMap filtered-metadata
+QVariantMap chapter-metadata
+QVariantMap vf-metadata
+QVariantMap af-metadata
+bool pause
+bool core-idle // lagging
+bool paused-for-cache // lagging
+bool cache-buffering-state // 0.0 - 100.0 until player will unpause
+double cache // cache fill state 0.0 - 100.0
+double cache-size // RW cache size in KB
+int cache-speed
+bool cache-idle // filled cache
+int hr-seek // [no|absolute|yes]  precise seeks
+double volume
+bool mute
+double audio-delay // set seconds to delay audio
+QVariantMap audio-params
+  format, samplerate, channels, hr-channels, channel-count
+int aid
+QString audio-codec
+QString audio-codec-name
+bool deinterlace
+QString hwdec // write to change decoder
+QString hwdec-current // read decoder
+QString hwdec-interop
+QString video-format
+QString video-codec
+QVariantMap video-params
+double estimated-vf-fps
+double video-aspect
+int vid
+int sid
+int secondary-sid
+double sub-delay
+double sub-pos // 0.0 - 100.0 (verticle position percent
+bool sub-visibility
+double sub-scale
+bool ass-force-margins
+bool sub-use-margins
+QString ass-style-override
+int playlist-pos
+int playlist-count
+QVariantList playlist
+  QVariantMap
+    filename, current, playing, title
+
+QVariantList track-list
+  QVariantMap
+
+QVariantList chapter-list
+  QVariantMap
+    title, time
+
+QVariantList af
+  QVariantMap
+QVariantList vf
+  QVariantMap
+
+double video-bitrate
+double audio-bitrate
+double sub-bitrate
+
+QVariantList audio-dvice-list
+  QVariantMap
+QString audio-device
+
+QString current-vo
+QString current-ao
+
+QVariantList decoder-list
+  QVariantMap
+
+QVariantList encoder-list
+
+QString mpv-version
+QString mpv-configuration
+QString ffmpeg-version
+
+
+// Probably don't care about
+QVariantList disc-titles
+  QVariantNode
+    count, id, length
+QVariantList disc-title-list
+QString disc-titlee
+int editions
+QVariantList edition-list
+  QVariantMap
+    id, title, default
+
+
+For options at runtime:
+  setProperty("options/%s")
+
+QVariantList property-list

@@ -1,0 +1,42 @@
+<RCC>
+  <qresource prefix="/">
+    <file>add.svg</file>
+    <file>album-art.png</file>
+    <file>arrow_drop_down.svg</file>
+    <file>circle.svg</file>
+    <file>cmd_clear.svg</file>
+    <file>cmd_help.svg</file>
+    <file>cmd_save.svg</file>
+    <file>edit.svg</file>
+    <file>invalid.svg</file>
+    <file>logo.icns</file>
+    <file>logo.ico</file>
+    <file>logo.svg</file>
+    <file>menu.svg</file>
+    <file>next.svg</file>
+    <file>open.svg</file>
+    <file>paste.svg</file>
+    <file>pause.svg</file>
+    <file>play.svg</file>
+    <file>playlist.svg</file>
+    <file>previous.svg</file>
+    <file>remove.svg</file>
+    <file>repeat_disabled.svg</file>
+    <file>repeat_one.svg</file>
+    <file>repeat_playlist.svg</file>
+    <file>reset.svg</file>
+    <file>reverse.svg</file>
+    <file>shuffle_disabled.svg</file>
+    <file>shuffle_enabled.svg</file>
+    <file>subtitle.svg</file>
+    <file>tool-next.ico</file>
+    <file>tool-pause.ico</file>
+    <file>tool-play.ico</file>
+    <file>tool-previous.ico</file>
+    <file>triangle.svg</file>
+    <file>update.svg</file>
+    <file>valid.svg</file>
+    <file>volume_mute.svg</file>
+    <file>volume_unmute.svg</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/">
+    <file>test1.webm</file>
+    <file>test2.webm</file>
+    <file>tst_application.qml</file>
+    <file>tst_input.qml</file>
+    <file>tst_tray.qml</file>
+  </qresource>
+</RCC>

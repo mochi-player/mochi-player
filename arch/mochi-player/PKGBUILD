@@ -1,0 +1,43 @@
+# Maintainer: u8sand <u8sand@gmail.com>
+# Contributor: Alfredo Ramos <alfredo dot ramos at yandex dot com>
+
+pkgname=mochi-player
+pkgver=2.1.0
+pkgrel=1
+pkgdesc='A free and open source, cross-platform, libmpv based multimedia player. Qt5 build.'
+arch=('i686' 'x86_64')
+url='http://mochi-player.github.io/'
+license=('GPL')
+
+depends=('mpv' 'qt5-declarative' 'qt5-svg')
+optdepends=(
+	'qt5-x11extras: for X11 support'
+	'qt5-wayland: for wayland support'
+	'qt5-translations: for localization'
+	'youtube-dl: for remote video streaming'
+	'noto-fonts: for proper font support'
+	'mpv-git: for bleeding-edge mpv features'
+)
+makedepends=('git' 'qt5-tools')
+provides=("${pkgname}=${pkgver}")
+conflicts=("${pkgname}-git")
+replaces=("${pkgname}-git")
+
+source=(
+	"${pkgname}-${pkgver}.tar.gz::https://github.com/mochi-player/mochi-player/archive/v${pkgver}.tar.gz"
+)
+
+prepare() {
+	mkdir ${srcdir}/build
+}
+
+build() {
+	cd ${srcdir}/build
+	qmake-qt5 ../mochi-player-${pkgver} -release -spec linux-g++
+	make -j $(grep -c ^processor /proc/cpuinfo)
+}
+
+package() {
+	cd ${srcdir}/build
+	make INSTALL_ROOT=${pkgdir} install
+}
