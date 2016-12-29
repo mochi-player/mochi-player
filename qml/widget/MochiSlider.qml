@@ -1,5 +1,6 @@
 import QtQuick 2.7
-import "."
+import QtQuick.Controls.Material 2.0
+import "../style"
 
 Item {
   id: slider
@@ -19,7 +20,7 @@ Item {
     x: 0
     y: slider.height/2 - height/2
     height: 2
-    color: MochiStyle.background.hard
+    color: Material.accent
     width: _safe(pos) * slider.width
   }
 
@@ -27,7 +28,7 @@ Item {
     x: incompleteRect.width
     y: slider.height/2 - height/2
     height: 2
-    color: MochiStyle.background.soft
+    color: Material.primary
     width: (1 - _safe(pos)) * slider.width
   }
 

@@ -11,10 +11,41 @@
 #include <QDesktopWidget>
 #include <QStyle>
 #include <QFileInfo>
+#include <QTextStream>
+#include <QPointer>
+
+// registered message_handler to send messages to the UI
+static QTextStream qStderr(stderr);
+static QPointer<Application> self = nullptr;
+static QtMessageHandler old_handler = nullptr;
+static void message_handler(QtMsgType type,
+                            const QMessageLogContext &ctx,
+                            const QString &msg) {
+  if(self.isNull())
+    old_handler(type, ctx, msg);
+  else
+    QMetaObject::invokeMethod(self, "emitMessage", Qt::QueuedConnection,
+                              Q_ARG(QString, QString("%0").arg(msg)));
+}
 
 Application::Application(QQuickItem *parent):
   QQuickItem(parent) {
   setObjectName("app");
+}
+
+Application::~Application() {
+  self.clear();
+}
+
+void Application::installMessageHandler() {
+  self.clear();
+  self = this;
+  old_handler = qInstallMessageHandler(message_handler);
+}
+
+void Application::emitMessage(QString msg) {
+  qStderr << msg << endl;
+  emit message(msg);
 }
 
 void Application::newPlayer() {
@@ -41,8 +72,12 @@ QStringList Application::arguments() {
   return QApplication::arguments();
 }
 
-QVariant Application::clipboard() {
-  return mimeDataToVariant(*QApplication::clipboard()->mimeData());
+QVariant Application::clipboard(QVariant clip) {
+  if(clip.isNull())
+    return mimeDataToVariant(*QApplication::clipboard()->mimeData());
+  else
+    QApplication::clipboard()->setText(clip.toString());
+  return QVariant();
 }
 
 void Application::aboutQt() {

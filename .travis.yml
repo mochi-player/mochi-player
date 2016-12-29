@@ -11,16 +11,17 @@ compiler:
 
 arch:
   packages:
-    - qt5-{declarative,svg,x11extras,translations,tools,quickcontrols}
+    - qt5-{declarative,svg,x11extras,translations,tools,quickcontrols,graphicaleffects}
     - xorg-server-xvfb
     - noto-fonts
     - youtube-dl
     - luajit
     - mpv-git
   script:
-    - "qmake ."
-    - "make -j $(grep -c ^processor /proc/cpuinfo)"
-    - "xvfb-run  -s \"-screen 0 640x480x24\" make check"
+    - "mkdir -p build"
+    - "cd build && qmake .."
+    - "cd build && make -j $(grep -c ^processor /proc/cpuinfo)"
+    - "cd build && xvfb-run  -s \"-screen 0 640x480x24\" make check"
 
 brew:
   packages:
@@ -29,9 +30,10 @@ brew:
     - qt5
   script:
     - "export CXX=g++-4.8 CC=gcc-4.8 PKG_CONFIG_PATH=/usr/local/opt/qt5/lib/pkgconfig"
-    - "/usr/local/Cellar/qt5/5*/bin/qmake"
-    - "make"
-    - "make check"
+    - "mkdir -p build"
+    - "cd build && /usr/local/Cellar/qt5/5*/bin/qmake .."
+    - "cd build && make"
+    - "cd build && make check"
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -s https://raw.githubusercontent.com/mochi-player/travis/master/arch-travis.sh | ARCH_TRAVIS_VERBOSE=1 bash; fi

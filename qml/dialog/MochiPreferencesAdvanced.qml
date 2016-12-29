@@ -1,79 +1,80 @@
 import QtQuick 2.7
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
+import "../style"
 import "../widget"
 
-Tab {
-  property var conf
-  title: qsTr("Advanced")
+ColumnLayout {
+  RowLayout {
+    Layout.fillWidth: true
+    Layout.alignment: Qt.AlignTop | Qt.AlignLeft
 
-  ColumnLayout {
-    anchors.fill: parent
-
-    RowLayout {
-      Layout.fillWidth: true
+    GroupBox {
       Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+      title: qsTr("Command Line")
 
-      MochiGroupBox {
-        Layout.alignment: Qt.AlignTop | Qt.AlignLeft
-        text: qsTr("Command Line")
+      ColumnLayout {
+        Label {
+          text: qsTr("mpv output:")
+        }
+        ComboBox {
+          model: player.debugLevelsVerbose
 
-        ColumnLayout {
-          MochiText {
-            text: qsTr("mpv output:")
-          }
-          MochiComboBox {
-            model: app.player.debugLevels
-            currentIndex: app.player.debugLevels.indexOf(conf.player.debug)
-            //onCurrentIndexChanged
-          }
-          Item { height: MochiStyle.spacing.margin }
-          MochiCheckBox {
-            text: qsTr("Clear output on new file")
-//            checked:
-          }
-          Item { height: MochiStyle.spacing.margin }
-          MochiText {
-            text: qsTr("Can be viewed by showing the command line.")
+          currentIndex: player.debugLevels.indexOf(player.debug)
+          onCurrentIndexChanged: player.debug = player.debugLevels[currentIndex]
+          Connections {
+              target: player
+              onDebugChanged: currentIndex = player.debugLevels.indexOf(player.debug)
           }
         }
-      }
-      MochiGroupBox {
-        Layout.alignment: Qt.AlignTop | Qt.AlignLeft
-        text: qsTr("Mouse/Touch Gestures")
-
-        ColumnLayout {
-          MochiCheckBox {
-            text: qsTr("Use Gestures")
-//            checked:
-          }
-          MochiText {
-            text: qsTr("Tap and drag horizontally to seek.<br>Tap and drag vertically to control volume.")
-          }
+        Item { height: Style.spacing.margin }
+        CheckBox { // TODO
+          text: qsTr("Clear output on new file")
+        }
+        Item { height: Style.spacing.margin }
+        Label {
+          text: qsTr("Can be viewed by showing the command line.")
         }
       }
     }
-    MochiGroupBox {
-      text: qsTr("mpv.conf")
-      Layout.fillWidth: true
+    GroupBox {
       Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+      title: qsTr("Mouse/Touch Gestures")
 
       ColumnLayout {
-        RowLayout {
-          Layout.fillWidth: true
+        CheckBox {
+          text: qsTr("Use Gestures")
 
-          MochiCheckBox {
-            text: qsTr("Use mpv.conf file")
-//            checked:
-          }
-          MochiTextButton {
-            text: qsTr("Edit File")
-//            onClicked:
+          checked: inputs.gestures
+          onCheckedChanged: inputs.gestures = checked
+          Connections {
+            target: inputs
+            onGesturesChanged: checked = input.gestures
           }
         }
-        MochiText {
-          text: qsTr("mochi-player honors your mpv.conf except some values that it overrides itself.<br>Please see mpv DOCS for a list of commands.")
+        Label {
+          text: qsTr("Tap and drag horizontally to seek.<br>Tap and drag vertically to control volume.")
         }
+      }
+    }
+  }
+  GroupBox {
+    title: qsTr("mpv.conf")
+    Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+
+    ColumnLayout {
+      RowLayout {
+        CheckBox { // TODO
+          text: qsTr("Use mpv.conf file")
+        }
+        Button { // TODO
+          text: qsTr("Edit File")
+        }
+      }
+      Label {
+        text: qsTr("mochi-player honors your mpv.conf except some values that it overrides itself.<br>Please see mpv DOCS for a list of commands.")
       }
     }
   }

@@ -64,25 +64,26 @@ MpvObject::MpvObject(QQuickItem * parent)
     throw std::runtime_error("could not initialize mpv context");
 
   // Make use of the MPV_SUB_API_OPENGL_CB API.
-  mpv::qt::set_option_variant(mpv, "vo", "opengl-cb");
+  mpv::qt::set_property(mpv, "vo", "opengl-cb");
+  mpv::qt::set_property(mpv, "terminal", false);
 
   // Prepare our event callbacks
-  setEventCallback(MPV_EVENT_PROPERTY_CHANGE, [=](mpv_event *event) {
+  setEngineEventCallback(MPV_EVENT_PROPERTY_CHANGE, [=](mpv_event *event) {
     propertyChange(static_cast<mpv_event_property*>(event->data));
   });
-  setEventCallback(MPV_EVENT_LOG_MESSAGE, [=](mpv_event *event) {
+  setEngineEventCallback(MPV_EVENT_LOG_MESSAGE, [=](mpv_event *event) {
     logMessage(static_cast<mpv_event_log_message*>(event->data));
   });
-  setEventCallback(MPV_EVENT_IDLE, [=](mpv_event*) {
+  setEngineEventCallback(MPV_EVENT_IDLE, [=](mpv_event*) {
     emit playStateChanged(playState = Idle);
   });
-  setEventCallback(MPV_EVENT_START_FILE, [=](mpv_event*) {
+  setEngineEventCallback(MPV_EVENT_START_FILE, [=](mpv_event*) {
     emit playStateChanged(playState = Loading);
   });
-  setEventCallback(MPV_EVENT_FILE_LOADED, [=](mpv_event*) {
+  setEngineEventCallback(MPV_EVENT_FILE_LOADED, [=](mpv_event*) {
     emit playStateChanged(playState = Playing);
   });
-  setEventCallback(MPV_EVENT_END_FILE, [=](mpv_event*) {
+  setEngineEventCallback(MPV_EVENT_END_FILE, [=](mpv_event*) {
     if(playState == Loading)
       emit playStateChanged(playState = Failed);
     else
@@ -147,31 +148,42 @@ void MpvObject::propertyChange(mpv_event_property *prop) {
 
 void MpvObject::logMessage(mpv_event_log_message *msg) {
   if(!msg) return;
-  qDebug() << msg->text;
+  qDebug() << QString(msg->text).trimmed();
 }
 
-void MpvObject::command(const QVariant &params) {
+QVariant MpvObject::command(const QVariant &params) {
+  if(!mpv) return QVariant();
+  if(!params.canConvert<QVariantList>())
+    return mpv::qt::command(mpv, QVariantList{params});
+  else
+    return mpv::qt::command(mpv, params);
+}
+
+void MpvObject::command_async(const QVariant &params) {
   if(!mpv) return;
-  mpv::qt::command_variant_async(mpv, params);
+  if(!params.canConvert<QVariantList>())
+    mpv::qt::command_async(mpv, 0, QVariantList{params});
+  else
+    mpv::qt::command_async(mpv, 0, params);
 }
 
 QVariant MpvObject::engineProperty(QString name) const {
   if(!mpv) return QVariant();
-  return mpv::qt::get_property_variant(mpv, name.toUtf8().constData());
+  return mpv::qt::get_property(mpv, name.toUtf8().constData());
 }
 
 bool MpvObject::setEngineProperty(QString name, const QVariant &value) {
   if(!mpv) return false;
+  return mpv::qt::set_property(mpv, name.toUtf8().constData(), value);
+}
+
+bool MpvObject::setEnginePropertyAsync(QString name, const QVariant &value) {
+  if(!mpv) return false;
   auto it = propertyCallbacks.find(name);
   if(it != propertyCallbacks.end())
     it->second = true;
-  return mpv::qt::set_property_variant_async(mpv,
-                                             name.toUtf8().constData(), value);
-}
+  return mpv::qt::set_property_async(mpv, 0, name.toUtf8().constData(), value);
 
-void MpvObject::setEngineOption(QString name, const QVariant &value) {
-  if(!mpv) return;
-  mpv::qt::set_option_variant(mpv, name.toUtf8().constData(), value);
 }
 
 void MpvObject::setEngineLogLevel(QString level) {
@@ -182,18 +194,18 @@ void MpvObject::setEngineLogLevel(QString level) {
 void MpvObject::setEngineConfig(const QVariantMap &config) {
   for(QVariantMap::const_iterator conf = config.begin();
       conf != config.end(); conf++)
-    setEngineOption(conf.key().toUtf8().constData(), conf.value());
+    setEngineProperty(conf.key().toUtf8().constData(), conf.value());
 }
 
-void MpvObject::setPropertyCallback(QString mpv_name,
-                                    MpvPropertyCallback callback) {
+void MpvObject::setEnginePropertyCallback(QString mpv_name,
+                                          MpvPropertyCallback callback) {
   if(!mpv) return;
   propertyCallbacks[mpv_name] = {callback, false};
-  mpv::qt::observe_property(mpv, mpv_name.toUtf8().constData());
+  mpv::qt::observe_property(mpv, 0, mpv_name.toUtf8().constData());
 }
 
-void MpvObject::setEventCallback(const mpv_event_id event,
-                                 MpvEventCallback callback) {
+void MpvObject::setEngineEventCallback(const mpv_event_id event,
+                                       MpvEventCallback callback) {
   eventCallbacks[event] = callback;
 }
 

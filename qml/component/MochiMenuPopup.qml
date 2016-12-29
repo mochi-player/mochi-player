@@ -1,130 +1,217 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import "../widget"
 
-Rectangle {
+Popup {
   objectName: "menu"
 
-  property var pos
-
-  property var videoTracks: player.tracks.filter(function() { return this.type == "video"; })
-  property var audioTracks: player.tracks.filter(function() { return this.type == "audio"; })
-  property var subtitleTracks: player.tracks.filter(function() { return this.type == "sub"; })
-
-  color: MochiStyle.background.normal
-  width: menuBody.width
-  height: menuBody.height + 10
-
-  MochiBorder {
-    id: border
-    width: 1
-
-    Image {
-      source: "qrc:/triangle.svg"
-      x: parent.x + parent.width - 20
-      y: parent.y + parent.height
-
-      height: 10
-      width: 10
-    }
+  function _track_name(track) {
+    return "%0 (%1%2)"
+      .arg(track["title"] || track["decoder-desc"] || track["external-filename"])
+      .arg(track["lang"])
+      .arg(track["external"] ? "*" : "");
   }
+
   ColumnLayout {
     id: menuBody
-    MochiCheckBox {
+    CheckBox {
       text: qsTr("Full Screen")
+
       checked: window.fullscreen
+      onCheckedChanged: window.fullscreen = checked
+      Connections {
+          target: window
+          onFullscreenChanged: checked = window.fullscreen
+      }
     }
-    MochiCheckBox {
+    CheckBox {
       text: qsTr("Dim Desktop")
+
       checked: window.dimDialog
+      onCheckedChanged: window.dimDialog = checked
+      Connections {
+          target: window
+          onFullscreenChanged: checked = window.dimDialog
+      }
     }
-    MochiCheckBox {
+    CheckBox {
       text: qsTr("Show CMD Line")
+
       checked: window.showCmdLine
+      onCheckedChanged: window.showCmdLine = checked
+      Connections {
+          target: window
+          onFullscreenChanged: checked = window.showCmdLine
+      }
+    }
+    RowLayout {
+      Layout.fillWidth: true
+      Label {
+        text: qsTr("On Top:")
+      }
+      ComboBox {
+        Layout.fillWidth: true
+        model: [qsTr("Always"), qsTr("When Playing"), qsTr("Never")]
+        // TODO connect
+      }
     }
     MochiSeparator { Layout.fillWidth: true }
     RowLayout {
       Layout.fillWidth: true
 
-      MochiCheckBox {
-        id: vidCheckbox
+      CheckBox { // TODO: is this necessary? TODO Implement
         text: qsTr("Video")
         checked: player.vid != -1
-        enabled: videoTracks.length
+        enabled: false
       }
-      MochiComboBox {
+      ComboBox {
         Layout.fillWidth: true
-        model: videoTracks
-//        currentText: player.vid
-        enabled: vidCheckbox.enabled && vidCheckbox.checked
+        model: player.videoTracks.map(_track_name)
+        enabled: model.length > 1
+
+        currentIndex: player.vid-1
+        onCurrentIndexChanged: player.vid = currentIndex+1
+        Connections {
+            target: player
+            onSidChanged: currentIndex = player.vid-1
+        }
+      }
+      Button { // TODO
+        Image {
+          anchors.centerIn: parent
+          source: "qrc:/add.svg"
+        }
+        enabled: false
+//          onClicked: player.addVideo(app.openFileDialog("", app.videoFiletypes))
       }
     }
     RowLayout {
       Layout.fillWidth: true
 
-      MochiCheckBox {
+      CheckBox { // TODO: is this necessary?
         id: aidCheckbox
         text: qsTr("Audio")
-        checked: player.aid
-        enabled: audioTracks.length
+        enabled: player.audioTracks.length
+
+        checked: !player.mute
+        onCheckedChanged: player.mute = !checked
+        Connections {
+            target: player
+            onSidChanged: checked = !player.mute
+        }
       }
-      MochiComboBox {
+      ComboBox {
         Layout.fillWidth: true
-        model: audioTracks
-//        currentText: player.aid
-        enabled: aidCheckbox.enabled && aidCheckbox.checked
+        model: player.audioTracks.map(_track_name)
+        enabled: model.length > 1 && !player.mute
+
+        currentIndex: player.aid-1
+        onCurrentIndexChanged: player.aid = currentIndex+1
+        Connections {
+            target: player
+            onSidChanged: currentIndex = player.aid-1
+        }
+      }
+      Button { // TODO
+        Image {
+          anchors.centerIn: parent
+          source: "qrc:/add.svg"
+        }
+        enabled: false
+//          onClicked: player.addAudio(app.openFileDialog("", app.audioFiletypes))
       }
     }
     RowLayout {
       Layout.fillWidth: true
 
-      MochiCheckBox {
-        id: sidCheckbox
+      CheckBox {
         text: qsTr("Subtitles")
-        checked: player.sid
-        enabled: subtitleTracks.length
+        enabled: player.subtitleTracks.length
+
+        checked: player.subs
+        onCheckedChanged: player.subs = checked
+        Connections {
+            target: player
+            onSidChanged: checked = player.subs
+        }
       }
-      MochiComboBox {
+      ComboBox {
         Layout.fillWidth: true
-        model: subtitleTracks
-//        currentText: player.sid
-        enabled: sidCheckbox.enabled && sidCheckbox.checked
+        model: player.subtitleTracks.map(_track_name)
+        enabled: model.length > 1 && player.subs
+
+        currentIndex: player.sid-1
+        onCurrentIndexChanged: player.sid = currentIndex+1
+        Connections {
+            target: player
+            onSidChanged: currentIndex = player.sid-1
+        }
       }
-      MochiTextButton {
-        text: "+"
+      Button {
+        Image {
+          anchors.centerIn: parent
+          source: "qrc:/add.svg"
+        }
         onClicked: player.addSubtitle(app.openFileDialog("", app.subtitleFiletypes))
       }
     }
     RowLayout {
       Layout.fillWidth: true
 
-      MochiText {
+      Label {
         text: "Speed"
       }
-      MochiTextButton {
-        text: "-"
-        onClicked: player.speed += 0.1
+      Button {
+        Image {
+          anchors.centerIn: parent
+          source: "qrc:/reset.svg"
+        }
+        onClicked: player.speed = 1.0
       }
-      MochiText {
-        Layout.fillWidth: true
-        Layout.alignment: Qt.AlignCenter
-        text: "x%0".arg(player.speed)
+      Item { Layout.fillWidth: true }
+      Label {
+        text: "x%0".arg(player.speed.toFixed(1))
       }
-      MochiTextButton {
-        text: "+"
+      Item { Layout.fillWidth: true }
+      Button {
+        Image {
+          anchors.centerIn: parent
+          source: "qrc:/remove.svg"
+          scale: 0.5
+        }
         onClicked: player.speed -= 0.1
       }
+      Button {
+        Image {
+          anchors.centerIn: parent
+          source: "qrc:/add.svg"
+        }
+        onClicked: player.speed += 0.1
+      }
     }
-    MochiTextButton {
+    Button {
       Layout.fillWidth: true
       text: "Take Screenshot..."
-      onClicked: player.screenshot.dialog ? window.screenshot() : player.screenshot()
+      onClicked: {
+        window.snapshotMode = true;
+        close();
+      }
     }
     MochiSeparator { Layout.fillWidth: true }
-    MochiTextButton {
+    RowLayout {
       Layout.fillWidth: true
-      text: "Preferences..."
-      onClicked: window.preferences()
+      Button {
+        Layout.fillWidth: true
+        text: "Preferences..."
+        onClicked: window.preferences()
+      }
+      Button {
+        text: "?"
+        onClicked: window.about()
+      }
     }
+
   }
 }

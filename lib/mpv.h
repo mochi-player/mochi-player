@@ -22,34 +22,35 @@ class MpvRenderer;
 typedef std::function<void(QVariant)> MpvPropertyCallback;
 typedef std::function<void(mpv_event*)> MpvEventCallback;
 
-enum PlayState {
-  Idle,
-  Loading,
-  Playing,
-  Stopped,
-  Failed
-};
-
 class MpvObject : public QQuickFramebufferObject {
     Q_OBJECT
-
     friend class MpvRenderer;
   public:
+    enum PlayState {
+      Idle,
+      Loading,
+      Playing,
+      Stopped,
+      Failed
+    };
+    Q_ENUMS(PlayState)
+
     MpvObject(QQuickItem *parent = 0);
     virtual ~MpvObject();
     virtual Renderer *createRenderer() const;
 
   public slots:
-    void command(const QVariant &params);
+    QVariant command(const QVariant &params);
+    void command_async(const QVariant &params);
     QVariant engineProperty(QString name) const;
     bool setEngineProperty(QString name, const QVariant &value);
-    void setEngineOption(QString name, const QVariant &value);
+    bool setEnginePropertyAsync(QString name, const QVariant &value);
     void setEngineConfig(const QVariantMap &config);
     void setEngineLogLevel(QString level);
 
   protected slots:
-    void setPropertyCallback(QString mpv_name, MpvPropertyCallback callback);
-    void setEventCallback(const mpv_event_id event, MpvEventCallback callback);
+    void setEnginePropertyCallback(QString mpv_name, MpvPropertyCallback callback);
+    void setEngineEventCallback(const mpv_event_id event, MpvEventCallback callback);
 
   private slots:
     void mpvEvents();

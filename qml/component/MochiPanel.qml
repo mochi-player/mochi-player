@@ -1,11 +1,13 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import "../widget"
 
 Rectangle {
   property alias menuButton: menuButton
 
-  color: MochiStyle.background.normal
+  color: Material.background
 
   RowLayout {
     anchors.top: parent.top
@@ -15,7 +17,7 @@ Rectangle {
 
     Item { width: 5 }
 
-    MochiButton {
+    ImageButton {
       source: "qrc:/open.svg"
       onClicked: function(event) {
         if(event.button == Qt.LeftButton)
@@ -29,99 +31,154 @@ Rectangle {
 
     Item { width: 5 }
 
-    MochiText {
+    Label {
       // TODO: Why is app not available here?
       text: app ? app.serializeTime(player.pos, player.duration) : ""
     }
 
     // TODO: (Figure out why the below code doesn't work)
-    //    MochiText {
+    //    Label {
     //      text: app.remaining ? " / -" : " / "
-    //      color: MochiStyle.text.soft
     //      visible: player.duration > 0
     //    }
 
-    //    MochiTextButton {
+    //    Button {
     //      text: app.remaining ? app.serializeTime(100.0 - player.pos, player.duration) : app.serializeTime(100.0, player.duration)
-    //      color: MochiStyle.text.soft
     //      font.weight: Font.Normal
     //      onClicked: app.remaining ^= true
     //    }
   }
 
+  StackLayout {
+    anchors.fill: parent
+    currentIndex: window.snapshotMode
+    Item {
+      anchors.fill: parent
+      ImageButton {
+        id: playButton
+        anchors.centerIn: parent
+        source: (player.path == "" || player.pause) ? "qrc:/play.svg" : "qrc:/pause.svg"
+        onClicked: player.pause ^= true
+        enabled: player.path != ""
+      }
 
-  MochiButton {
-    id: playButton
-    anchors.centerIn: parent
-    source: (player.path == "" || player.pause) ? "qrc:/play.svg" : "qrc:/pause.svg"
-    onClicked: player.pause ^= true
-    enabled: player.path != ""
-  }
+      RowLayout {
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: playButton.left
 
-  RowLayout {
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    anchors.right: playButton.left
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+        spacing: 20
 
-    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-    spacing: 20
+        ImageButton {
+          source: "qrc:/reverse.svg"
+          onClicked: player.pos = 0.0
+          enabled: player.path != ""
+        }
+        ImageButton {
+          source: "qrc:/previous.svg"
+          onClicked: playlist.index -= 1
+          enabled: playlist.index > 0
+        }
+        Item { width: 5 }
+      }
 
-    MochiButton {
-      source: "qrc:/reverse.svg"
-      onClicked: player.pos = 0.0
-      enabled: player.path != ""
+      RowLayout {
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: playButton.right
+
+        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+        spacing: 20
+
+        Item { width: 5 }
+        ImageButton {
+          source: "qrc:/next.svg"
+          onClicked: playlist.index += 1
+          enabled: (playlist.length - playlist.index) < 1
+        }
+        ImageButton {
+          source: player.mute ? "qrc:/volume_mute.svg" : "qrc:/volume_unmute.svg"
+          onClicked: player.mute ^= true
+        }
+        MochiSlider {
+          width: 100
+          pos: player.volume / 100.0
+          onUpdatePos: function(pos) { player.volume = pos * 100.0; }
+        }
+      }
+
+      RowLayout {
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+        spacing: 20
+
+        ImageButton {
+          id: menuButton
+          source: "qrc:/menu.svg"
+          onClicked: menu.visible ^= true
+        }
+        ImageButton {
+          source: "qrc:/playlist.svg"
+          onClicked: playlist.visible ^= true
+          enabled: playlist.length > 1
+        }
+
+        Item { width: 5 }
+      }
     }
-    MochiButton {
-      source: "qrc:/previous.svg"
-      onClicked: playlist.index -= 1
-      enabled: playlist.index > 0
-    }
-    Item { width: 5 }
-  }
+    Item {
+      id: snapshotMode
+      anchors.fill: parent
 
-  RowLayout {
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    anchors.left: playButton.right
+      ImageButton {
+        id: captureButton
+        anchors.centerIn: parent
+        source: "qrc:/snapshot.svg"
+        onClicked: player.screenshot() // TODO
+      }
 
-    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-    spacing: 20
+      RowLayout {
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: captureButton.left
 
-    Item { width: 5 }
-    MochiButton {
-      source: "qrc:/next.svg"
-      onClicked: playlist.index += 1
-      enabled: (playlist.length - playlist.index) < 1
-    }
-    MochiButton {
-      source: player.mute ? "qrc:/volume_mute.svg" : "qrc:/volume_unmute.svg"
-      onClicked: player.mute ^= true
-    }
-    MochiSlider {
-      width: 100
-      pos: player.volume / 100.0
-      onUpdatePos: function(pos) { player.volume = pos * 100.0; }
-    }
-  }
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+        spacing: 20
 
-  RowLayout {
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    anchors.right: parent.right
-    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-    spacing: 20
-    
-    MochiButton {
-      id: menuButton
-      source: "qrc:/menu.svg"
-      onClicked: menu.visible ^= true
-    }
-    MochiButton {
-      source: "qrc:/playlist.svg"
-      onClicked: playlist.visible ^= true
-      enabled: playlist.length > 1
-    }
+        ImageButton {
+          source: "qrc:/subtitle.svg"
+          opacity: player.subs ? 1.0 : 0.5
+          onClicked: player.subs ^= true
+        }
+        ImageButton {
+          source: "qrc:/reverse.svg"
+          onClicked: player.frameBackStep()
+        }
+        Item { width: 5 }
+      }
 
-    Item { width: 5 }
+      RowLayout {
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: captureButton.right
+
+        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+        spacing: 20
+
+        Item { width: 5 }
+        ImageButton {
+          source: "qrc:/reverse.svg"
+          onClicked: player.frameStep()
+          rotation: 180
+        }
+        ImageButton {
+          source: "qrc:/close.svg"
+          onClicked: window.snapshotMode = false
+        }
+      }
+    }
   }
 }

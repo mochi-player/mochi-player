@@ -1,7 +1,10 @@
 import QtQuick 2.7
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
 import Mochi 1.0 as Mochi
+import "../style"
 import "../widget"
 import "../dialog"
 
@@ -14,6 +17,7 @@ ApplicationWindow {
   property bool fullscreen: false
   property bool dimDialog: false
   property bool showCmdLine: true
+  property bool snapshotMode: false
 
   property alias menu: menu
   property alias input: input
@@ -34,9 +38,12 @@ ApplicationWindow {
       window.showNormal();
   }
 
-//    menuBar: MochiMenu {
-//      //      visible: !app.hideAllControls
-//    }
+  Material.foreground: Style.color.foreground
+  Material.background: Style.color.background
+  Material.accent: Style.color.accent
+  Material.primary: Style.color.primary
+  font.family: Style.font.normal
+  font.pointSize: Style.font.size
 
   MochiInput {
     id: input
@@ -44,7 +51,7 @@ ApplicationWindow {
 
     Rectangle {
       anchors.fill: parent
-      color: MochiStyle.background.normal
+      color: Material.background
 
       ColumnLayout {
         anchors.fill: parent
@@ -52,7 +59,7 @@ ApplicationWindow {
         SplitView {
           orientation: Qt.Horizontal
           handleDelegate: Rectangle {
-            color: MochiStyle.background.accent
+            color: Material.primary
             width: 1
           }
           Layout.fillWidth: true
@@ -61,7 +68,7 @@ ApplicationWindow {
           SplitView {
             orientation: Qt.Vertical
             handleDelegate: Rectangle {
-              color: MochiStyle.background.accent
+              color: Material.primary
               height: 1
             }
             Layout.fillWidth: true
@@ -70,20 +77,17 @@ ApplicationWindow {
             Rectangle {
               Layout.fillWidth: true
               Layout.fillHeight: true
-              color: MochiStyle.background.player
 
               MochiPlayer {
                 id: player
                 anchors.fill: parent
-                //                    visible: !app.hideAlbumArt
               }
             }
 
             MochiTerminal {
               id: terminal
-
               Layout.fillWidth: true
-              height: 100
+              height: 200
               visible: showCmdLine
             }
           }
@@ -92,7 +96,6 @@ ApplicationWindow {
 
             Layout.fillHeight: true
             width: 100
-            //                visible: app.playlistVisible
           }
         }
 
@@ -104,26 +107,20 @@ ApplicationWindow {
           onUpdatePos: function(pos) {
             player.seek(pos * player.duration, true);
           }
-          //            visible: !app.hideAllControls
         }
 
         MochiPanel {
           id: panel
           Layout.fillWidth: true
           height: 25
-          //            visible: !app.hideAllControls
         }
         Item { height: 1 }
       }
     }
     MochiMenuPopup {
       id: menu
-      // TODO: Make this work
-
       x: window.width - menu.width - 60
       y: window.height - panel.height - menu.height - 10
-      //      z: 1
-
       visible: false
     }
   }
@@ -135,7 +132,6 @@ ApplicationWindow {
         event.accepted = true;
       else
         event.accepted = false;
-      // acceptProposedAction
     }
     onDropped: function(event) {
       if(event.hasUrls) {

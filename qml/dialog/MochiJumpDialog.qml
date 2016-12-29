@@ -1,8 +1,11 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
+import "../style"
 import "../widget"
 
-MochiDialog {
+Dialog {
   property bool valid: h.value*60*60+m.value*60+s.value < player.duration
   width: 310
   height: 45
@@ -13,10 +16,10 @@ MochiDialog {
       Layout.alignment: Qt.AlignVCenter
       source: valid ? 'qrc:/valid.svg' : 'qrc:/invalid.svg'
     }
-    Rectangle {
+    Pane {
       Layout.fillWidth: true
       Layout.fillHeight: true
-      color: MochiStyle.background.accent
+
       Row {
         anchors.fill: parent
         MochiSpinBox {
@@ -25,7 +28,7 @@ MochiDialog {
           suffix: qsTr(" hr")
           maximumValue: 99
         }
-        MochiText {
+        Text {
           text: " :"
         }
         MochiSpinBox {
@@ -34,7 +37,7 @@ MochiDialog {
           suffix: qsTr(" min")
           maximumValue: 59
         }
-        MochiText {
+        Text {
           text: " :"
         }
         MochiSpinBox {
@@ -45,8 +48,8 @@ MochiDialog {
         }
       }
     }
-    Item { width: MochiStyle.spacing.margin }
-    MochiTextButton {
+    Item { width: Style.spacing.margin }
+    Button {
       Layout.alignment: Qt.AlignVCenter
       text: qsTr("OK")
       onClicked: accept()

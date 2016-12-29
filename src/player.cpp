@@ -26,16 +26,16 @@ Player::Player(QQuickItem *parent):
 
 void Player::load(const QVariant &arg) {
   if(arg.canConvert<QString>())
-    command(QStringList{"loadfile", arg.toString()});
+    command_async(QStringList{"loadfile", arg.toString()});
   else if(arg.canConvert<QUrl>())
-    command(QStringList{"loadfile", arg.toUrl().toString()});
+    command_async(QStringList{"loadfile", arg.toUrl().toString()});
   else if(arg.canConvert<QStringList>()) {
     QStringList args = arg.toStringList();
     if(!args.empty()) {
       load(args.front());
       args.pop_front();
       for(auto &f : args)
-        command(QStringList{"loadfile", f, "append"});
+        command_async(QStringList{"loadfile", f, "append"});
     }
   }
   else if(arg.canConvert< QList<QUrl> >()) {
@@ -44,7 +44,7 @@ void Player::load(const QVariant &arg) {
       load(args.front());
       args.pop_front();
       for(auto &f : args)
-        command(QStringList{"loadfile", f.toString(), "append"});
+        command_async(QStringList{"loadfile", f.toString(), "append"});
     }
   }
 }
@@ -58,15 +58,15 @@ void Player::seek(double time, bool absolute) {
   QStringList args{"seek", QString::number(time)};
   if(absolute)
     args.append("absolute");
-  command(args);
+  command_async(args);
 }
 
 void Player::frameStep() {
-  command("frame-step");
+  command_async("frame-step");
 }
 
 void Player::frameBackStep() {
-  command("frame-back-step");
+  command_async("frame-back-step");
 }
 
 //double Player::aspect() {

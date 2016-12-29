@@ -3,8 +3,6 @@
         <file>component/MochiApplication.qml</file>
         <file>component/MochiConfig.qml</file>
         <file>component/MochiInput.qml</file>
-        <file>component/MochiMenu.qml</file>
-        <file>component/MochiMenuItem.qml</file>
         <file>component/MochiMenuPopup.qml</file>
         <file>component/MochiOverlay.qml</file>
         <file>component/MochiPanel.qml</file>
@@ -12,6 +10,7 @@
         <file>component/MochiPlaylist.qml</file>
         <file>component/MochiRecent.qml</file>
         <file>component/MochiRemote.qml</file>
+        <file>component/MochiTerminal.qml</file>
         <file>component/MochiTray.qml</file>
         <file>component/MochiUpdate.qml</file>
         <file>component/MochiWindow.qml</file>
@@ -26,26 +25,15 @@
         <file>dialog/MochiPreferencesShortcuts.qml</file>
         <file>dialog/MochiPreferencesSubtitles.qml</file>
         <file>dialog/MochiPreferencesVideo.qml</file>
-        <file>widget/MochiBorder.qml</file>
-        <file>widget/MochiButton.qml</file>
-        <file>widget/MochiCheckBox.qml</file>
-        <file>widget/MochiComboBox.qml</file>
-        <file>widget/MochiDialog.qml</file>
-        <file>widget/MochiGroupBox.qml</file>
-        <file>widget/MochiMenuBar.qml</file>
-        <file>widget/MochiRadioButton.qml</file>
+        <file>qtquickcontrols2.conf</file>
         <file>widget/MochiSeekbar.qml</file>
         <file>widget/MochiSeparator.qml</file>
         <file>widget/MochiSlider.qml</file>
         <file>widget/MochiSpinBox.qml</file>
-        <file>widget/MochiStyle.qml</file>
-        <file>widget/MochiTabBar.qml</file>
-        <file>widget/MochiTabView.qml</file>
-        <file>widget/MochiTerminal.qml</file>
-        <file>widget/MochiText.qml</file>
-        <file>widget/MochiTextArea.qml</file>
-        <file>widget/MochiTextButton.qml</file>
-        <file>widget/MochiTextInput.qml</file>
-        <file>widget/qmldir</file>
+        <file>widget/Button.qml</file>
+        <file>widget/ImageButton.qml</file>
+        <file>widget/Dialog.qml</file>
+        <file>style/qmldir</file>
+        <file>style/Style.qml</file>
     </qresource>
 </RCC>

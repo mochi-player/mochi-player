@@ -23,11 +23,11 @@ class Player : public PlayerEngine {
       Q_SLOT void m_set_##name(type value, bool fromEngine = false) { \
         emit name##Changed(name = value); \
         if(!fromEngine) \
-          setEngineProperty(engine_name, value); \
+          setEnginePropertyAsync(engine_name, value); \
       } \
     private: \
       Q_SLOT void m_init_##name() { \
-        setPropertyCallback(engine_name, [=](const QVariant &value) { \
+        setEnginePropertyCallback(engine_name, [=](const QVariant &value) { \
           m_set_##name(value.value< type >(), true); \
         }); \
       }

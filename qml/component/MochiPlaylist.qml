@@ -1,5 +1,8 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.0
+import QtQuick.Controls.Material 2.0
+import "../style"
 import "../widget"
 
 Item {
@@ -11,12 +14,12 @@ Item {
   });
   property int indWidth: Math.min(
       (search.height / i.sourceSize.height) * i.sourceSize.width,
-          t.boundingRect.width+MochiStyle.spacing.margin)
+          t.boundingRect.width+Style.spacing.margin)
 
   TextMetrics {
     id: t
-    font.family: MochiStyle.font.normal
-    font.pointSize: MochiStyle.font.size
+    font.family: Style.font.normal
+    font.pointSize: Style.font.size
     text: playlistView.count
   }
 
@@ -28,16 +31,15 @@ Item {
 
   Rectangle {
     anchors.fill: parent
-    color: MochiStyle.background.normal
+    color: Material.background
 
     ColumnLayout {
       anchors.fill: parent
       spacing: 1
 
-      MochiTextInput {
+      TextField {
         id: search
         Layout.fillWidth: true
-        background: MochiStyle.background.soft
         placeholderText: qsTr("Search Playlist")
       }
 
@@ -55,7 +57,7 @@ Item {
           anchors.left: parent.left
           anchors.right: parent.right
           height: search.height
-          color: (index == playlistView.currentIndex) ? MochiStyle.background.accent : MochiStyle.background.normal
+          color: (index == playlistView.currentIndex) ? Material.primary : Material.background
           RowLayout {
             Layout.fillWidth: true
             height: parent.height
@@ -65,12 +67,12 @@ Item {
               width: indWidth
 
               Image {
-                anchors.right: parent.right
+                anchors.centerIn: parent
                 width: parent.width
                 source: (index == player.playlistPos) ? 'qrc:/play.svg' : ''
                 visible: index == player.playlistPos
               }
-              MochiText {
+              Label {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -80,14 +82,13 @@ Item {
                 visible: index != player.playlistPos
               }
             }
-            Text {
+            Label {
               Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
               Layout.fillWidth: true
               text: modelData.title
-              color: MochiStyle.text.normal
               font.weight: modelData.playing ? Font.Bold : Font.Normal
             }
-//            Text {
+//            Label {
 //              text: modelData.duration
 //            }
           }
@@ -102,7 +103,8 @@ Item {
       Rectangle {
         Layout.fillWidth: true
         height: r.height
-        color: MochiStyle.background.normal
+        color: Material.background
+
         ColumnLayout {
           id: r
           anchors.left: parent.left
@@ -111,7 +113,7 @@ Item {
           RowLayout {
             Layout.alignment: Qt.AlignVCenter | Qt.AlignCenter
 
-            MochiButton {
+            ImageButton {
               source: "qrc:/repeat_disabled.svg"
       //        TODO:
       //        source: {
@@ -126,11 +128,11 @@ Item {
               //      onClicked: app.cycle(playlist.repeat)
             }
             Item { Layout.fillWidth: true }
-            MochiText {
+            Label {
               text: (playlistView.currentIndex >= 0) ? "%0 / %1".arg(playlistView.currentIndex+1).arg(playlistView.count) : ""
             }
             Item { Layout.fillWidth: true }
-            MochiButton {
+            ImageButton {
               source: playlistShuffle ? "qrc:/shuffle_enabled.svg" : "qrc:/shuffle_enabled.svg"
               onClicked: playlistShuffle ^= true
             }

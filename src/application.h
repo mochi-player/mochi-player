@@ -37,16 +37,22 @@ class Application : public QQuickItem {
   M_PROPERTY(QStringList, subtitleFileypes,)
 public:
   explicit Application(QQuickItem *parent = 0);
-
+  ~Application();
   QJSEngine *getEngine() { return engine; }
 
 public slots:
+  void installMessageHandler();
+  void emitMessage(QString msg);
+signals:
+  void message(QString);
+
+public slots:
+  void newPlayer();
   void showInFolder(QString path);
   void onlineHelp();
-  void newPlayer();
 
   QStringList arguments();
-  QVariant clipboard();
+  QVariant clipboard(QVariant clip = QVariant());
   void aboutQt();
 
 protected slots:

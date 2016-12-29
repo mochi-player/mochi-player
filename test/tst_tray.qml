@@ -3,7 +3,11 @@ import QtQuick.Controls 1.0
 import QtTest 1.0
 import Mochi 1.0 as Mochi
 
-Item {
+TestCase {
+  id: test
+  name: "TrayTest"
+  when: windowShown
+
   Mochi.Tray {
     id: tray
     icon: ":/logo.ico"
@@ -26,13 +30,7 @@ Item {
     }
   }
 
-  TestCase {
-    id: test
-    name: "TrayTest"
-    when: windowShown
-
-    function test_tray() {
-      ;
-    }
+  function test_tray() {
+    ;
   }
 }

@@ -1,5 +1,6 @@
 import QtQuick 2.7
-import "."
+import QtQuick.Controls.Material 2.0
+import "../style"
 
 Item {
   id: seekbar
@@ -16,7 +17,7 @@ Item {
     x: 0
     y: 0
     height: seekbar.height
-    color: MochiStyle.background.hard
+    color: Material.accent
     width: _safe(pos) * seekbar.width
   }
 
@@ -24,15 +25,15 @@ Item {
     x: incompleteRect.width
     y: 0
     height: seekbar.height
-    color: MochiStyle.background.soft
+    color: Material.primary
     width: (1 - _safe(pos)) * seekbar.width
   }
 
   Repeater {
     id: ticks
     Rectangle {
-      color: MochiStyle.seekbar.ticks
-      width: MochiStyle.seekbar.tickWidth
+      color: Style.seekbar.ticks
+      width: Style.seekbar.tickWidth
       height: seekbar.height
       y: 0
       x: _safe(modelData) * seekbar.width

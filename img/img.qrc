@@ -4,6 +4,7 @@
     <file>album-art.png</file>
     <file>arrow_drop_down.svg</file>
     <file>circle.svg</file>
+    <file>close.svg</file>
     <file>cmd_clear.svg</file>
     <file>cmd_help.svg</file>
     <file>cmd_save.svg</file>
@@ -28,6 +29,7 @@
     <file>reverse.svg</file>
     <file>shuffle_disabled.svg</file>
     <file>shuffle_enabled.svg</file>
+    <file>snapshot.svg</file>
     <file>subtitle.svg</file>
     <file>tool-next.ico</file>
     <file>tool-pause.ico</file>

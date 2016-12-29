@@ -1,7 +1,8 @@
 import QtQuick 2.7
-import "."
+import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls.Material 2.0
 
 Rectangle {
-  color: MochiStyle.background.hard
+  color: Material.accent
   height: 1
 }

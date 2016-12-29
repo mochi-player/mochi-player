@@ -5,6 +5,7 @@ import Mochi 1.0 as Mochi
 Mochi.Application {
   id: app
 
+  property var langs: ["auto", "en"]
   version: "2.1.0"
   url: "http://mochi-player.github.io/"
   debug: true
@@ -18,7 +19,6 @@ Mochi.Application {
   splitter: 200
   hidePopup: true
   hideAllControls: false
-
   audioFiletypes: [
     "*.mp3", "*.ogg", "*.wav", "*.wma", "*.m4a", "*.aac",
     "*.ac3", "*.ape", "*.flac", "*.ra", "*.mka"]
@@ -33,6 +33,8 @@ Mochi.Application {
   mediaFiletypes: audioFiletypes.concat(videoFiletypes)
   subtitleFileypes: [
     "*.sub", "*.srt", "*.ass", "*.ssa"]
+
+  onMessage: function(msg) { window.terminal.terminalOutput.append(msg); }
 
   MochiWindow {
     id: window
@@ -68,6 +70,9 @@ Mochi.Application {
   }
 
   Component.onCompleted: {
+    // Forward internal messages to terminal and console
+    app.installMessageHandler();
+
     // Attach QML's JSEngine to Application
     app.attach(this);
 
