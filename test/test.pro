@@ -13,25 +13,23 @@ HEADERS += \
   $$PWD/tst_config.h \
   $$PWD/tst_util.h
 
-include($$PWD/../qml/qml.pri)
-include($$PWD/../img/img.pri)
-include($$PWD/../src/src.pri)
-
-TESTDATA = \
+TEST_DATA = \
   $$PWD/test1.webm \
   $$PWD/test2.webm
 
-target.path =
-INSTALLS += target testfiles
 
-# https://larry-price.com/blog/2013/11/14/copy-data-using-qmake
-win32 {
-  PWD_WIN = $${PWD}
-  PWD_WIN ~= s,/,\\,g
-  QMAKE_POST_LINK += $$quote(xcopy $${PWD_WIN}\\$${TESTDATA} $${OUT_PWD_WIN}\\$${TESTDATA} /E)
-  QMAKE_CLEAN += /s /f /q $${TESTDATA} && rd /s /q $${TESTDATA}
-}
-unix {
-  QMAKE_POST_LINK += $$quote(cp -rf $${TESTDATA} $${OUT_PWD})
-  QMAKE_CLEAN += -r $${TESTDATA}
-}
+include($$PWD/../app/app.pri)
+
+
+# testdata
+isEmpty(CP):CP=cp -rf
+testdata.input = TEST_DATA
+testdata.output = ${QMAKE_FILE_BASE}${QMAKE_FILE_EXT}
+testdata.commands += $$CP ${QMAKE_FILE_NAME} ${QMAKE_FILE_OUT}
+testdata.CONFIG = target_predeps no_link
+QMAKE_EXTRA_COMPILERS += testdata
+
+
+# noinstall
+target.files =
+INSTALLS += target

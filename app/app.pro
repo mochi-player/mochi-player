@@ -5,9 +5,7 @@ CONFIG += staticlib c++11
 
 SOURCES += $$PWD/main.cpp
 
-include($$PWD/../qml/qml.pri)
-include($$PWD/../img/img.pri)
-include($$PWD/../src/src.pri)
+include($$PWD/app.pri)
 
 target.path = /usr/bin/
 INSTALLS += target
