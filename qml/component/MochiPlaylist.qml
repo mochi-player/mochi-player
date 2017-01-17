@@ -7,11 +7,7 @@ import "../widget"
 
 Item {
   property bool playlistShuffle: false
-  property var playlist: player.playlist.map(function(e, i) {
-    if(!e.title)
-      e.title = e.filename;
-    return e;
-  });
+  property var playlist: player.playlist
   property int indWidth: Math.min(
       (search.height / i.sourceSize.height) * i.sourceSize.width,
           t.boundingRect.width+Style.spacing.margin)
@@ -51,7 +47,8 @@ Item {
 
         model: playlist.filter(function(e, i) {
           return String(i+1).indexOf(search.text) != -1 ||
-                   e.title.indexOf(search.text) != -1;
+                   (e.title && e.title.indexOf(search.text) != -1) ||
+                   (e.filename && e.filename.indexOf(search.text) != -1);
         })
         delegate: Rectangle {
           anchors.left: parent.left
@@ -85,7 +82,7 @@ Item {
             Label {
               Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
               Layout.fillWidth: true
-              text: modelData.title
+              text: app.serializeMedia(modelData)
               font.weight: modelData.playing ? Font.Bold : Font.Normal
             }
 //            Label {

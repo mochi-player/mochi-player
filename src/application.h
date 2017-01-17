@@ -42,9 +42,9 @@ public:
 
 public slots:
   void installMessageHandler();
-  void emitMessage(QString msg);
+  void emitMessage(const QString &msg);
 signals:
-  void message(QString);
+  void message(const QString&);
 
 public slots:
   void newPlayer();
@@ -65,6 +65,7 @@ protected slots:
   void setIcon(QWindow *window, QString icon);
   void fit(QWindow *window, QRect current, QRect target, int perc);
   QString serializeTime(double pos, double duration);
+  QString serializeMedia(const QVariantMap &media);
   QString pwd();
 
 private:

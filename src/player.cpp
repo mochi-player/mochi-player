@@ -47,6 +47,9 @@ void Player::load(const QVariant &arg) {
         command_async(QStringList{"loadfile", f.toString(), "append"});
     }
   }
+  else
+    return;
+  setProperty("pause", false);
 }
 
 void Player::stop() {

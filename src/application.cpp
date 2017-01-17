@@ -25,7 +25,7 @@ static void message_handler(QtMsgType type,
     old_handler(type, ctx, msg);
   else
     QMetaObject::invokeMethod(self, "emitMessage", Qt::QueuedConnection,
-                              Q_ARG(QString, QString("%0").arg(msg)));
+                              Q_ARG(QString, msg));
 }
 
 Application::Application(QQuickItem *parent):
@@ -43,7 +43,7 @@ void Application::installMessageHandler() {
   old_handler = qInstallMessageHandler(message_handler);
 }
 
-void Application::emitMessage(QString msg) {
+void Application::emitMessage(const QString &msg) {
   qStderr << msg << endl;
   emit message(msg);
 }
@@ -190,6 +190,10 @@ void Application::fit(QWindow *win, QRect current, QRect target, int percent) {
 
 QString Application::serializeTime(double pos, double duration) {
   return ::serializeTime(pos * duration / 100.0, duration);
+}
+
+QString Application::serializeMedia(const QVariantMap &media) {
+  return ::serializeMedia(media);
 }
 
 QString Application::pwd() {

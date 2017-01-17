@@ -34,3 +34,29 @@ void TestUtil::serializeTime() {
   QFETCH(QString, result);
   QCOMPARE(::serializeTime(time, totalTime), result);
 }
+
+void TestUtil::serializeMedia_data() {
+  QTest::addColumn<QString>("title");
+  QTest::addColumn<QString>("filename");
+  QTest::addColumn<bool>("toParent");
+  QTest::addColumn<QString>("result");
+
+  QTest::newRow("simple") << QString() << "/long/path/to/test.mkv" << false << "test.mkv";
+  QTest::newRow("simple_to_parent") << QString() << "/long/path/to/test.mkv" << true << "to/test.mkv";
+  QTest::newRow("no_parent") << QString() << "/test.mkv" << true << "/test.mkv";
+  QTest::newRow("relative") << QString() << "test.mkv" << true << "test.mkv";
+  QTest::newRow("title") << "Test" << "/long/path/to/thetest.mkv" << false << "Test";
+}
+
+void TestUtil::serializeMedia() {
+  QFETCH(QString, title);
+  QFETCH(QString, filename);
+  QFETCH(bool, toParent);
+  QFETCH(QString, result);
+  QVariantMap media;
+  media["title"] = title;
+  media["filename"] = filename;
+  QCOMPARE(::serializeMedia(media, toParent), result);
+}
+
+

@@ -13,6 +13,12 @@ static void wakeup(void *ctx) {
                             Qt::QueuedConnection);
 }
 
+static QString rtrim(QString str) {
+  while(!str.isEmpty() && str[str.length()-1].isSpace())
+    str.chop(1);
+  return str;
+}
+
 class MpvRenderer : public QQuickFramebufferObject::Renderer {
   static void *get_proc_address(void *ctx, const char *name) {
     (void)ctx;
@@ -148,7 +154,7 @@ void MpvObject::propertyChange(mpv_event_property *prop) {
 
 void MpvObject::logMessage(mpv_event_log_message *msg) {
   if(!msg) return;
-  qDebug() << QString(msg->text).trimmed();
+  qDebug() << rtrim(msg->text).toUtf8().constData();
 }
 
 QVariant MpvObject::command(const QVariant &params) {

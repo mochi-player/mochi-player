@@ -97,8 +97,8 @@ static inline QVariant node_to_variant(const mpv_node *node)
 }
 
 struct node_builder {
-    node_builder(const QVariant& v, bool force_list = false) {
-        set(&node_, v, force_list);
+    node_builder(const QVariant& v) {
+        set(&node_, v);
     }
     ~node_builder() {
         free_node(&node_);
@@ -140,24 +140,23 @@ private:
         // So a cast really seems to be needed to avoid warnings (urgh).
         return static_cast<int>(v.type()) == static_cast<int>(t);
     }
-    void set(mpv_node *dst, const QVariant &src, bool force_list = false) {
-        if (!force_list && test_type(src, QMetaType::QString)) {
+    void set(mpv_node *dst, const QVariant &src) {
+        if (test_type(src, QMetaType::QString)) {
             dst->format = MPV_FORMAT_STRING;
             dst->u.string = dup_qstring(src.toString());
             if (!dst->u.string)
                 goto fail;
-        } else if (!force_list && test_type(src, QMetaType::Bool)) {
+        } else if (test_type(src, QMetaType::Bool)) {
             dst->format = MPV_FORMAT_FLAG;
             dst->u.flag = src.toBool() ? 1 : 0;
-        } else if (!force_list && (
-                   test_type(src, QMetaType::Int) ||
+        } else if (test_type(src, QMetaType::Int) ||
                    test_type(src, QMetaType::LongLong) ||
                    test_type(src, QMetaType::UInt) ||
-                   test_type(src, QMetaType::ULongLong)))
+                   test_type(src, QMetaType::ULongLong))
         {
             dst->format = MPV_FORMAT_INT64;
             dst->u.int64 = src.toLongLong();
-        } else if (!force_list && test_type(src, QMetaType::Double)) {
+        } else if (test_type(src, QMetaType::Double)) {
             dst->format = MPV_FORMAT_DOUBLE;
             dst->u.double_ = src.toDouble();
         } else if (src.canConvert<QVariantList>()) {
@@ -274,7 +273,7 @@ static inline int set_option_variant(mpv_handle *ctx, const QString &name,
  */
 static inline QVariant command_variant(mpv_handle *ctx, const QVariant &args)
 {
-    node_builder node(args, true);
+    node_builder node(args);
     mpv_node res;
     if (mpv_command_node(ctx, node.node(), &res) < 0)
         return QVariant();
@@ -358,7 +357,7 @@ static inline int set_property(mpv_handle *ctx, const QString &name,
  */
 static inline QVariant command(mpv_handle *ctx, const QVariant &args)
 {
-    node_builder node(args, true);
+    node_builder node(args);
     mpv_node res;
     int err = mpv_command_node(ctx, node.node(), &res);
     if (err < 0)
@@ -392,7 +391,7 @@ static inline int set_property_async(mpv_handle *ctx, int reply_userdata,
 static inline int command_async(mpv_handle *ctx, int reply_userdata,
                                 const QVariant &args)
 {
-    node_builder node(args, true);
+    node_builder node(args);
     return mpv_command_node_async(ctx, reply_userdata, node.node());
 }
 

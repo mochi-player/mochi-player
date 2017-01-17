@@ -3,12 +3,14 @@ TEMPLATE=aux
 include($$PWD/../app/app.pri)
 
 # lupdate build target
+#LUPDATE=$(LUPDATE)
 isEmpty(LUPDATE):LUPDATE=lupdate
 lupdate.commands += $$LUPDATE -no-obsolete -locations none $$_PRO_FILE_
 QMAKE_EXTRA_TARGETS += lupdate
 PRE_TARGETDEPS += lupdate
 
 # lrelease compiler
+#LUPDATE=$(LRELEASE)
 isEmpty(LRELEASE):LRELEASE=lrelease
 lrelease.input = TRANSLATIONS
 lrelease.output = ${QMAKE_FILE_BASE}.qm

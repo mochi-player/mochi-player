@@ -67,15 +67,16 @@ Popup {
         enabled: false
       }
       ComboBox {
+        id: vidCombo
         Layout.fillWidth: true
         model: player.videoTracks.map(_track_name)
         enabled: model.length > 1
 
         currentIndex: player.vid-1
-        onCurrentIndexChanged: player.vid = currentIndex+1
+        onCurrentIndexChanged: player.vid = vidCombo.currentIndex+1
         Connections {
             target: player
-            onSidChanged: currentIndex = player.vid-1
+            onSidChanged: vidCombo.currentIndex = player.vid-1
         }
       }
       Button { // TODO
@@ -96,22 +97,23 @@ Popup {
         enabled: player.audioTracks.length
 
         checked: !player.mute
-        onCheckedChanged: player.mute = !checked
+        onCheckedChanged: player.mute = !aidCheckbox.checked
         Connections {
             target: player
-            onSidChanged: checked = !player.mute
+            onSidChanged: aidCheckbox.checked = !player.mute
         }
       }
       ComboBox {
+        id: aidCombo
         Layout.fillWidth: true
         model: player.audioTracks.map(_track_name)
         enabled: model.length > 1 && !player.mute
 
         currentIndex: player.aid-1
-        onCurrentIndexChanged: player.aid = currentIndex+1
+        onCurrentIndexChanged: player.aid = aidCombo.currentIndex+1
         Connections {
             target: player
-            onSidChanged: currentIndex = player.aid-1
+            onSidChanged: aidCombo.currentIndex = player.aid-1
         }
       }
       Button { // TODO
@@ -127,26 +129,28 @@ Popup {
       Layout.fillWidth: true
 
       CheckBox {
+        id: sidCheckbox
         text: qsTr("Subtitles")
         enabled: player.subtitleTracks.length
 
         checked: player.subs
-        onCheckedChanged: player.subs = checked
+        onCheckedChanged: player.subs = sidCheckbox.checked
         Connections {
             target: player
-            onSidChanged: checked = player.subs
+            onSidChanged: sidCheckbox.checked = player.subs
         }
       }
       ComboBox {
+        id: sidCombo
         Layout.fillWidth: true
         model: player.subtitleTracks.map(_track_name)
         enabled: model.length > 1 && player.subs
 
         currentIndex: player.sid-1
-        onCurrentIndexChanged: player.sid = currentIndex+1
+        onCurrentIndexChanged: player.sid = sidCombo.currentIndex+1
         Connections {
             target: player
-            onSidChanged: currentIndex = player.sid-1
+            onSidChanged: sidCombo.currentIndex = player.sid-1
         }
       }
       Button {

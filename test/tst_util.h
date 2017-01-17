@@ -9,6 +9,8 @@ private slots:
   void mimeDataToVariant();
   void serializeTime_data();
   void serializeTime();
+  void serializeMedia_data();
+  void serializeMedia();
 };
 
 #endif // TST_UTIL_H

@@ -7,6 +7,7 @@
 
 QVariant mimeDataToVariant(const QMimeData &mimeData);
 QString serializeTime(int time, int totalTime = 0);
+QString serializeMedia(const QVariantMap &media, bool keepParent = false);
 
 void showInFolder(QString path, QString file = QString());
 
