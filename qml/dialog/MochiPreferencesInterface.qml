@@ -105,7 +105,7 @@ ColumnLayout {
       ColumnLayout { // TODO
         RadioButton {
           text: qsTr("Intelligently auto show")
-          checked: app.playlistAutoShow
+          checked: player.playlistAutoShow
           ButtonGroup.group: playlistAutoShow
         }
         RadioButton {

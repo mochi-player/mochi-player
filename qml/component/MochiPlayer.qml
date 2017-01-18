@@ -34,6 +34,7 @@ Mochi.Player {
   speed: 1.0
   subs: true
   debug: "status"
+  playlistAutoShow: true
 
   config: {
     "af": "scaletempo",

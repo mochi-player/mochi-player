@@ -57,6 +57,7 @@ class Player : public PlayerEngine {
   M_PROPERTY_EX(QVariantMap, aparams, "audio-params")
   M_PROPERTY_EX(QVariantMap, vparams, "video-params")
 
+  M_PROPERTY(bool, playlistAutoShow, USER true)
   M_PROPERTY(QString, debug, USER true)
   M_PROPERTY(QVariantMap, config, USER true)
 
@@ -69,6 +70,7 @@ public slots:
   void seek(double time, bool absolute = false);
   void frameStep();
   void frameBackStep();
+  void screenshot();
 
 private:
 };

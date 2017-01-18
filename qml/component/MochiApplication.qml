@@ -33,7 +33,8 @@ Mochi.Application {
   mediaFiletypes: audioFiletypes.concat(videoFiletypes)
   subtitleFileypes: [
     "*.sub", "*.srt", "*.ass", "*.ssa"]
-
+  width: 640
+  height: 480
   onMessage: function(msg) { window.terminal.terminalOutput.append(msg); }
 
   MochiWindow {
@@ -41,8 +42,20 @@ Mochi.Application {
 
     title: player.title || "Mochi-Player"
     visible: true
-    width: 640
-    height: 480
+
+    width: app.width
+    onWidthChanged: app.width = window.width
+    Connections {
+        target: app
+        onWidthChanged: window.width = app.width
+    }
+
+    height: app.height
+    onHeightChanged: app.height = window.height
+    Connections {
+        target: app
+        onHeightChanged: window.height = app.height
+    }
   }
 
   MochiTray {

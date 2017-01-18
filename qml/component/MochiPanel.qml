@@ -77,8 +77,14 @@ Rectangle {
         }
         ImageButton {
           source: "qrc:/previous.svg"
-          onClicked: playlist.index -= 1
-          enabled: playlist.index > 0
+          onClicked: player.playlistPos -= 1
+          enabled: player.playlist.length > 1 && player.playlistPos > 0
+          Label {
+            anchors.centerIn: parent
+            text: player.playlistPos
+            color: Material.accent
+            visible: parent.enabled
+          }
         }
         Item { width: 5 }
       }
@@ -94,8 +100,14 @@ Rectangle {
         Item { width: 5 }
         ImageButton {
           source: "qrc:/next.svg"
-          onClicked: playlist.index += 1
-          enabled: (playlist.length - playlist.index) < 1
+          onClicked: player.playlistPos += 1
+          enabled: player.playlist.length > 1 && (player.playlist.length - player.playlistPos) > 1
+          Label {
+            anchors.centerIn: parent
+            text: player.playlistPos+2
+            color: Material.accent
+            visible: parent.enabled
+          }
         }
         ImageButton {
           source: player.mute ? "qrc:/volume_mute.svg" : "qrc:/volume_unmute.svg"
@@ -122,8 +134,8 @@ Rectangle {
         }
         ImageButton {
           source: "qrc:/playlist.svg"
-          onClicked: playlist.visible ^= true
-          enabled: playlist.length > 1
+          onClicked: window.playlistVisible ^= true
+          enabled: player.playlist.length > 1
         }
 
         Item { width: 5 }
@@ -137,7 +149,7 @@ Rectangle {
         id: captureButton
         anchors.centerIn: parent
         source: "qrc:/snapshot.svg"
-        onClicked: player.screenshot() // TODO
+        onClicked: player.screenshot()
       }
 
       RowLayout {

@@ -4,6 +4,7 @@
 #include <QStringList>
 #include <QMetaObject>
 #include <QMetaMethod>
+#include <QFileInfo>
 
 Player::Player(QQuickItem *parent):
   MpvObject(parent) {
@@ -25,31 +26,50 @@ Player::Player(QQuickItem *parent):
 }
 
 void Player::load(const QVariant &arg) {
+  QString file;
   if(arg.canConvert<QString>())
-    command_async(QStringList{"loadfile", arg.toString()});
+    file = arg.toString();
   else if(arg.canConvert<QUrl>())
-    command_async(QStringList{"loadfile", arg.toUrl().toString()});
+    file = arg.toUrl().toString();
   else if(arg.canConvert<QStringList>()) {
     QStringList args = arg.toStringList();
     if(!args.empty()) {
-      load(args.front());
+      file = args.front();
       args.pop_front();
-      for(auto &f : args)
-        command_async(QStringList{"loadfile", f, "append"});
+      if(!args.empty()) {
+        command_async(QStringList{"loadfile", file});
+        for(auto &f : args)
+          command_async(QStringList{"loadfile", f, "append"});
+        setProperty("pause", false);
+        return;
+      }
     }
-  }
-  else if(arg.canConvert< QList<QUrl> >()) {
+  } else if(arg.canConvert< QList<QUrl> >()) {
     QList<QUrl> args = arg.value< QList<QUrl> >();
     if(!args.empty()) {
-      load(args.front());
+      file = args.front().toString();
       args.pop_front();
-      for(auto &f : args)
-        command_async(QStringList{"loadfile", f.toString(), "append"});
+      if(!args.empty()) {
+        command_async(QStringList{"loadfile", file});
+        for(auto &f : args)
+          command_async(QStringList{"loadfile", f.toString(), "append"});
+        setProperty("pause", false);
+        return;
+      }
     }
   }
-  else
-    return;
-  setProperty("pause", false);
+  if(!file.isEmpty()) {
+    if(playlistAutoShow) {
+      QFileInfo f(file);
+      if(f.isDir())
+        command_async(QStringList{"loadfile", f.filePath()});
+      else
+        command_async(QStringList{"loadfile", f.path()});
+    }
+    else
+      command_async(QStringList{"loadfile", file});
+    setProperty("pause", false);
+  }
 }
 
 void Player::stop() {
@@ -70,6 +90,10 @@ void Player::frameStep() {
 
 void Player::frameBackStep() {
   command_async("frame-back-step");
+}
+
+void Player::screenshot() {
+  command_async(QVariantList{"screenshot", subs ? "subtitles" : "video"});
 }
 
 //double Player::aspect() {

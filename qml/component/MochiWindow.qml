@@ -18,6 +18,7 @@ ApplicationWindow {
   property bool dimDialog: false
   property bool showCmdLine: true
   property bool snapshotMode: false
+  property bool playlistVisible: false
 
   property alias menu: menu
   property alias input: input
@@ -102,7 +103,7 @@ ApplicationWindow {
         MochiSeekbar {
           Layout.fillWidth: true
           height: 5
-          pos: player.pos / 100.0
+          pos: player.pos ? (player.pos / 100.0) : 0
           ticks: player.chapters.map(function(ch) { return ch.time / player.duration; });
           onUpdatePos: function(pos) {
             player.seek(pos * player.duration, true);
