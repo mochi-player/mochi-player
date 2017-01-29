@@ -2,7 +2,6 @@
   <qresource prefix="/">
     <file>tst_application.qml</file>
     <file>tst_input.qml</file>
-    <file>tst_tray.qml</file>
     <file>tst_player.qml</file>
   </qresource>
 </RCC>
