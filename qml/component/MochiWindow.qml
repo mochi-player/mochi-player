@@ -148,9 +148,23 @@ ApplicationWindow {
     }
   }
 
-  MochiRecent {
+
+  Mochi.Recent {
     id: recent
+    max: 20
+    resume: true
+//    todo: function(path) {
+//      console.log(path);
+//      recent.recent.splice(0, 0, {
+//                             "path": path,
+//                             "title": player.title,
+//                             "resume": player.time
+//                           });
+//      while(recent.recent.length > max)
+//        recent.recent.splice(0, 1);
+//    }
   }
+
 
   // Public methods
   function open() { _createDialog("MochiOpenDialog"); }

@@ -1,13 +1,18 @@
 import QtQuick 2.7
-import QtQuick.Controls 1.4
-import Mochi 1.0 as Mochi
+import Qt.labs.platform 1.0
 
-Mochi.Tray {
-  id: tray
+SystemTrayIcon {
+  iconSource: "qrc:/logo.svg"
 
-  icon: ":/logo.svg"
-
-  //    contextMenu: Menu {
-
-  //    }
+  onActivated: {
+      window.show()
+      window.raise()
+      window.requestActivate()
+  }
+  menu: Menu {
+      MenuItem {
+          text: qsTr("Quit")
+          onTriggered: Qt.quit()
+      }
+  }
 }

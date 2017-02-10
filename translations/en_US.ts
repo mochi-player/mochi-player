@@ -371,4 +371,11 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>MochiTray</name>
+    <message>
+        <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

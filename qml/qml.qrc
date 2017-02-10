@@ -8,7 +8,6 @@
         <file>component/MochiPanel.qml</file>
         <file>component/MochiPlayer.qml</file>
         <file>component/MochiPlaylist.qml</file>
-        <file>component/MochiRecent.qml</file>
         <file>component/MochiRemote.qml</file>
         <file>component/MochiTerminal.qml</file>
         <file>component/MochiTray.qml</file>

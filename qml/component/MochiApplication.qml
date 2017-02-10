@@ -60,7 +60,7 @@ Mochi.Application {
 
   MochiTray {
     id: tray
-    toolTip: window.title
+    tooltip: window.title
     visible: true
   }
 
