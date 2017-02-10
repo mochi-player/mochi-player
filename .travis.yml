@@ -29,7 +29,7 @@ brew:
     - mpv
     - qt5
   script:
-    - "export PATH=\"/usr/local/Cellar/qt5/5*/bin/:$PATH\" CXX=g++-4.8 CC=gcc-4.8 PKG_CONFIG_PATH=/usr/local/opt/qt5/lib/pkgconfig"
+    - "export PATH=/usr/local/opt/qt5/bin:$PATH CXX=g++-4.8 CC=gcc-4.8 PKG_CONFIG_PATH=/usr/local/opt/qt5/lib/pkgconfig"
     - "mkdir -p build"
     - "cd build && qmake .."
     - "cd build && make"
