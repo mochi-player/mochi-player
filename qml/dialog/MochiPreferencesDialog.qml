@@ -16,69 +16,77 @@ Dialog {
     else
       config.save()
   }
-
-  RowLayout {
+  ColumnLayout {
     anchors.fill: parent
-    ColumnLayout {
+    RowLayout {
       Layout.fillHeight: true
-      width: 100
+      Layout.fillWidth: true
+      ColumnLayout {
+        Layout.fillHeight: true
+        width: 100
 
-      Repeater {
-        model: [
-          qsTr("Interface"),
-          qsTr("Remote"),
-          qsTr("Shortcuts"),
-          qsTr("Video"),
-          qsTr("Subtitles"),
-          qsTr("Advanced")
-        ]
-        Rectangle {
-          width: parent.width
-          Layout.fillHeight: true
-          color: (view.currentIndex == index) ? Material.accent : Material.background
-          border.width: 1
-          border.color: Material.primary
-          Label {
-            text: modelData
-            anchors.centerIn: parent
-          }
-          MouseArea {
-            cursorShape: Qt.PointingHandCursor
-            anchors.fill: parent
-            onClicked: view.currentIndex = index
+        Repeater {
+          model: [
+            qsTr("Interface"),
+            qsTr("Remote"),
+            qsTr("Shortcuts"),
+            qsTr("Video"),
+            qsTr("Subtitles"),
+            qsTr("Advanced")
+          ]
+          Rectangle {
+            width: parent.width
+            Layout.fillHeight: true
+            color: (view.currentIndex == index) ? Material.accent : Material.background
+            border.width: 1
+            border.color: Material.primary
+            Label {
+              text: modelData
+              anchors.centerIn: parent
+            }
+            MouseArea {
+              cursorShape: Qt.PointingHandCursor
+              anchors.fill: parent
+              onClicked: view.currentIndex = index
+            }
           }
         }
       }
-    }
-    StackLayout {
-      id: view
-      Layout.fillWidth: true
-      Layout.fillHeight: true
+      StackLayout {
+        id: view
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-      MochiPreferencesInterface {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        MochiPreferencesInterface {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+        }
+        MochiPreferencesRemote {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+        }
+        MochiPreferencesShortcuts {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+        }
+        MochiPreferencesVideo {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+        }
+        MochiPreferencesSubtitles {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+        }
+        MochiPreferencesAdvanced {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+        }
       }
-      MochiPreferencesRemote {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-      }
-      MochiPreferencesShortcuts {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-      }
-      MochiPreferencesVideo {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-      }
-      MochiPreferencesSubtitles {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-      }
-      MochiPreferencesAdvanced {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-      }
+    }
+    Button {
+      Layout.alignment: Qt.AlignRight
+      text: qsTr("Close")
+      onClicked: close()
     }
   }
 }

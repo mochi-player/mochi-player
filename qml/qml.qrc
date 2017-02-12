@@ -25,14 +25,19 @@
         <file>dialog/MochiPreferencesSubtitles.qml</file>
         <file>dialog/MochiPreferencesVideo.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>style/qmldir</file>
+        <file>style/Style.qml</file>
+        <file>widget/Button.qml</file>
+        <file>widget/CheckBox.qml</file>
+        <file>widget/CheckIndicator.qml</file>
+        <file>widget/ComboBox.qml</file>
+        <file>widget/Dialog.qml</file>
+        <file>widget/ImageButton.qml</file>
         <file>widget/MochiSeekbar.qml</file>
         <file>widget/MochiSeparator.qml</file>
         <file>widget/MochiSlider.qml</file>
         <file>widget/MochiSpinBox.qml</file>
-        <file>widget/Button.qml</file>
-        <file>widget/ImageButton.qml</file>
-        <file>widget/Dialog.qml</file>
-        <file>style/qmldir</file>
-        <file>style/Style.qml</file>
+        <file>widget/RadioButton.qml</file>
+        <file>widget/RadioIndicator.qml</file>
     </qresource>
 </RCC>

@@ -7,3 +7,8 @@ lupdate_only {
     $$PWD/../qml/style/*.qml \
     $$PWD/../qml/widget/*.qml
 }
+
+DISTFILES += \
+    $$PWD/widget/CheckBox.qml \
+    $$PWD/widget/ComboBox.qml \
+    $$PWD/widget/RadioButton.qml
