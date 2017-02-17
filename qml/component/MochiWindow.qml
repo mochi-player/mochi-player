@@ -19,6 +19,7 @@ ApplicationWindow {
   property bool showCmdLine: true
   property bool snapshotMode: false
   property bool playlistVisible: false
+  property int playlistWidth: 100
 
   property alias menu: menu
   property alias input: input
@@ -89,15 +90,53 @@ ApplicationWindow {
               id: terminal
               Layout.fillWidth: true
               height: 200
+              Layout.minimumHeight: 100
               visible: showCmdLine
             }
           }
-          MochiPlaylist {
-            id: playlist
-
+          ColumnLayout {
             Layout.fillHeight: true
-            width: 100
+            Layout.minimumWidth: 250
+            width: playlistWidth
+
+            TabBar {
+              id: bar
+              Layout.fillWidth: true
+              currentIndex: 1
+
+              TabButton {
+                text: qsTr("Recent")
+                font.capitalization: Font.Capitalize
+              }
+              TabButton {
+                text: qsTr("Playlist")
+                font.capitalization: Font.Capitalize
+              }
+              TabButton {
+                text: qsTr("Chapters")
+                font.capitalization: Font.Capitalize
+              }
+            }
+            StackLayout {
+              Layout.fillWidth: true
+              Layout.fillHeight: true
+              currentIndex: bar.currentIndex
+
+              MochiRecent {
+                id: recent
+                anchors.fill: parent
+              }
+              MochiPlaylist {
+                id: playlist
+                anchors.fill: parent
+              }
+              MochiChapters {
+                id: chapters
+                anchors.fill: parent
+              }
+            }
           }
+
         }
 
         MochiSeekbar {
@@ -149,10 +188,10 @@ ApplicationWindow {
   }
 
 
-  Mochi.Recent {
-    id: recent
-    max: 20
-    resume: true
+//  Mochi.Recent {
+//    id: recent
+//    max: 20
+//    resume: true
 //    todo: function(path) {
 //      console.log(path);
 //      recent.recent.splice(0, 0, {
@@ -163,7 +202,7 @@ ApplicationWindow {
 //      while(recent.recent.length > max)
 //        recent.recent.splice(0, 1);
 //    }
-  }
+//  }
 
 
   // Public methods

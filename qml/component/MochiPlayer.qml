@@ -29,7 +29,6 @@ Mochi.Player {
     qsTr("Trace")]
   property string vo: "opengl-cb"
 
-
   volume: 100
   speed: 1.0
   subs: true

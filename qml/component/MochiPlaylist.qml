@@ -5,136 +5,52 @@ import QtQuick.Controls.Material 2.0
 import "../style"
 import "../widget"
 
-Item {
-  property bool playlistShuffle: false
-  property var playlist: player.playlist
-  property int indWidth: Math.min(
-      (search.height / i.sourceSize.height) * i.sourceSize.width,
-          t.boundingRect.width+Style.spacing.margin)
+ColumnLayout {
+  property bool shuffle: false
 
-  TextMetrics {
-    id: t
-    font.family: Style.font.normal
-    font.pointSize: Style.font.size
-    text: playlistView.count
+  MochiListView {
+    id: listView
+    Layout.fillHeight: true
+    Layout.fillWidth: true
+
+    list: player.playlist
+    listPos: player.playlistPos
+    onListPosChanged: player.playlistPos = listView.listPos
+    Connections {
+      target: player
+      onChapterChanged: if(listView.length > 0) { listView.listPos = player.playlistPos; }
+    }
   }
 
-  Image {
-    id: i
-    source: 'qrc:/play.svg'
-    visible: false
-  }
+  ColumnLayout {
+    Layout.fillWidth: true
 
-  Rectangle {
-    anchors.fill: parent
-    color: Material.background
+    MochiSeparator { Layout.fillWidth: true }
+    RowLayout {
+      Layout.alignment: Qt.AlignVCenter | Qt.AlignCenter
 
-    ColumnLayout {
-      anchors.fill: parent
-      spacing: 1
-
-      TextField {
-        id: search
-        Layout.fillWidth: true
-        placeholderText: qsTr("Search Playlist")
+      ImageButton {
+        source: "qrc:/repeat_disabled.svg"
+//        TODO:
+//        source: {
+//          if(playlist.repeat == "")
+//            return "qrc:/repeat_disabled.svg";
+//          else if(playlist.repeat == "once")
+//            return "qrc:/repeat_once.svg";
+//          else if(playlist.repeat == "all")
+//            return "qrc:/repeat_enabled.svg";
+//          return "";
+//        }
+        //      onClicked: app.cycle(playlist.repeat)
       }
-
-      ListView {
-        id: playlistView
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        z: -1
-
-        model: playlist.filter(function(e, i) {
-          return String(i+1).indexOf(search.text) != -1 ||
-                   (e.title && e.title.indexOf(search.text) != -1) ||
-                   (e.filename && e.filename.indexOf(search.text) != -1);
-        })
-        delegate: Rectangle {
-          anchors.left: parent.left
-          anchors.right: parent.right
-          height: search.height
-          color: (index == playlistView.currentIndex) ? Material.primary : Material.background
-          RowLayout {
-            Layout.fillWidth: true
-            height: parent.height
-            Item {
-              Layout.fillHeight: true
-              Layout.alignment: Qt.AlignVCenter
-              width: indWidth
-
-              Image {
-                anchors.centerIn: parent
-                width: parent.width
-                source: (index == player.playlistPos) ? 'qrc:/play.svg' : ''
-                visible: index == player.playlistPos
-              }
-              Label {
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                horizontalAlignment: Text.AlignRight
-                verticalAlignment: Text.AlignVCenter
-                text: (index != player.playlistPos) ? index+1 : ''
-                visible: index != player.playlistPos
-              }
-            }
-            Label {
-              Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-              Layout.fillWidth: true
-              text: app.serializeMedia(modelData)
-              font.weight: modelData.playing ? Font.Bold : Font.Normal
-            }
-//            Label {
-//              text: modelData.duration
-//            }
-          }
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: playlistView.currentIndex = index
-            onDoubleClicked: player.playlistPos = index
-          }
-        }
+      Item { Layout.fillWidth: true }
+      Label {
+        text: (listView.currentIndex >= 0) ? "%0 / %1".arg(listView.currentIndex+1).arg(listView.count) : ""
       }
-      Rectangle {
-        Layout.fillWidth: true
-        height: r.height
-        color: Material.background
-
-        ColumnLayout {
-          id: r
-          anchors.left: parent.left
-          anchors.right: parent.right
-          MochiSeparator { Layout.fillWidth: true }
-          RowLayout {
-            Layout.alignment: Qt.AlignVCenter | Qt.AlignCenter
-
-            ImageButton {
-              source: "qrc:/repeat_disabled.svg"
-      //        TODO:
-      //        source: {
-      //          if(playlist.repeat == "")
-      //            return "qrc:/repeat_disabled.svg";
-      //          else if(playlist.repeat == "once")
-      //            return "qrc:/repeat_once.svg";
-      //          else if(playlist.repeat == "all")
-      //            return "qrc:/repeat_enabled.svg";
-      //          return "";
-      //        }
-              //      onClicked: app.cycle(playlist.repeat)
-            }
-            Item { Layout.fillWidth: true }
-            Label {
-              text: (playlistView.currentIndex >= 0) ? "%0 / %1".arg(playlistView.currentIndex+1).arg(playlistView.count) : ""
-            }
-            Item { Layout.fillWidth: true }
-            ImageButton {
-              source: playlistShuffle ? "qrc:/shuffle_enabled.svg" : "qrc:/shuffle_enabled.svg"
-              onClicked: playlistShuffle ^= true
-            }
-          }
-        }
+      Item { Layout.fillWidth: true }
+      ImageButton {
+        source: shuffle ? "qrc:/shuffle_enabled.svg" : "qrc:/shuffle_enabled.svg"
+        onClicked: shuffle ^= true
       }
     }
   }

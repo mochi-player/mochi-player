@@ -59,18 +59,23 @@ class Player : public PlayerEngine {
 
   M_PROPERTY(bool, playlistAutoShow, USER true)
   M_PROPERTY(QString, debug, USER true)
+  M_PROPERTY(QVariantList, recent, USER true)
   M_PROPERTY(QVariantMap, config, USER true)
 
 public:
   explicit Player(QQuickItem * parent = 0);
 
 public slots:
+  void quit();
   void load(const QVariant &arg);
   void stop();
   void seek(double time, bool absolute = false);
   void frameStep();
   void frameBackStep();
   void screenshot();
+
+protected slots:
+  void updateRecent();
 
 private:
 };

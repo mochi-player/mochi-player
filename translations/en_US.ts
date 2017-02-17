@@ -44,6 +44,13 @@
     </message>
 </context>
 <context>
+    <name>MochiListView</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MochiMenuPopup</name>
     <message>
         <source>Full Screen</source>
@@ -156,13 +163,6 @@
     </message>
     <message>
         <source>Trace</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MochiPlaylist</name>
-    <message>
-        <source>Search Playlist</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -379,6 +379,21 @@
     <name>MochiTray</name>
     <message>
         <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MochiWindow</name>
+    <message>
+        <source>Recent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chapters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

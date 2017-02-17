@@ -23,14 +23,38 @@ Player::Player(QQuickItem *parent):
           this, SLOT(setEngineLogLevel(QString)));
   connect(this, SIGNAL(configChanged(QVariantMap)),
           this, SLOT(setEngineConfig(QVariantMap)));
+
+  // Other signals
+  connect(this, &MpvObject::playStateChanged,
+          this, [=](const PlayState &ps) {
+    if(ps == Stopped) updateRecent();
+  });
+}
+
+void Player::quit() {
+  updateRecent();
+}
+
+void Player::updateRecent() {
+  QVariantMap m;
+  m["path"] = path;
+  m["title"] = title;
+  m["pos"] = pos;
+  recent.prepend(m);
+  emit recentChanged(recent);
 }
 
 void Player::load(const QVariant &arg) {
-  QString file;
+  QString file, opts;
   if(arg.canConvert<QString>())
     file = arg.toString();
   else if(arg.canConvert<QUrl>())
     file = arg.toUrl().toString();
+  else if(arg.canConvert< QVariantMap >()) {
+     QVariantMap args = arg.toMap();
+     file = args["path"].toString();
+     opts = QString("start=%0%").arg(QString::number(args["pos"].toDouble()));
+  }
   else if(arg.canConvert<QStringList>()) {
     QStringList args = arg.toStringList();
     if(!args.empty()) {
@@ -59,15 +83,21 @@ void Player::load(const QVariant &arg) {
     }
   }
   if(!file.isEmpty()) {
+    QStringList cmd;
     if(playlistAutoShow) {
       QFileInfo f(file);
       if(f.isDir())
-        command_async(QStringList{"loadfile", f.filePath()});
+        cmd = QStringList{"loadfile", f.filePath()};
       else
-        command_async(QStringList{"loadfile", f.path()});
+        cmd = QStringList{"loadfile", f.path()};
     }
     else
-      command_async(QStringList{"loadfile", file});
+      cmd = QStringList{"loadfile", file};
+    if(!opts.isNull()) {
+      cmd.append("replace");
+      cmd.append(opts);
+    }
+    command_async(cmd);
     setProperty("pause", false);
   }
 }

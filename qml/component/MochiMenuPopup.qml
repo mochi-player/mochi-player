@@ -216,6 +216,5 @@ Popup {
         onClicked: window.about()
       }
     }
-
   }
 }

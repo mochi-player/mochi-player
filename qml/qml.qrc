@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>component/MochiApplication.qml</file>
+        <file>component/MochiChapters.qml</file>
         <file>component/MochiConfig.qml</file>
         <file>component/MochiInput.qml</file>
         <file>component/MochiMenuPopup.qml</file>
@@ -8,6 +9,7 @@
         <file>component/MochiPanel.qml</file>
         <file>component/MochiPlayer.qml</file>
         <file>component/MochiPlaylist.qml</file>
+        <file>component/MochiRecent.qml</file>
         <file>component/MochiRemote.qml</file>
         <file>component/MochiTerminal.qml</file>
         <file>component/MochiTray.qml</file>
@@ -33,6 +35,7 @@
         <file>widget/ComboBox.qml</file>
         <file>widget/Dialog.qml</file>
         <file>widget/ImageButton.qml</file>
+        <file>widget/MochiListView.qml</file>
         <file>widget/MochiSeekbar.qml</file>
         <file>widget/MochiSeparator.qml</file>
         <file>widget/MochiSlider.qml</file>

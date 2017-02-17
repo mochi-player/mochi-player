@@ -78,6 +78,7 @@ Mochi.Application {
   }
 
   function quit() {
+    player.quit();
     config.save();
     Qt.quit();
   }
