@@ -7,8 +7,14 @@ Mochi.Input {
   gestures: true
 
   mouse: {
-    "LeftVDrag": "function(p) { player.volume(p * 100.0); }",
-    "LeftHDrag": "function(p) { player.seek(p * player.length); }",
+//    "LeftDrag!": "function(x,y) { return {x: window.x, y: window.y}; }",
+//    "LeftDrag": "function(dx,dy,r) { window.x = r.x + dx; window.y = r.y + dy; }",
+//    "RightDrag!": "function(x,y) { return {width: window.width, height: window.height}; }",
+//    "RightDrag": "function(dx,dy,r) { window.width = r.width + dx; window.height = r.height + dy; }",
+    "LeftVDrag!": "function(x,y) { return player.volume; }",
+    "LeftVDrag": "function(dx,dy,v) { player.volume = Math.min(Math.max(v - (dy * 100 / window.height), 0), 100); }",
+    "LeftHDrag!": "function(x,y) { return player.pos; }",
+    "LeftHDrag": "function(dx,dy,v) { player.pos = Math.min(Math.max(v + (dx * player.duration / window.width / 100), 0), player.duration); }",
     "LeftDoubleClick": "window.fullscreen ^= true",
     "RightClick": "player.pause ^= true",
     "WheelDown": "player.volume = Math.max(0.0, player.volume - 5.0)",
@@ -62,6 +68,8 @@ Mochi.Input {
     "Space": "player.pause ^= true",
     "Tab": "overlay.media_info ^= true",
     "Up": "playlist.selection -= 1",
+    "Shift+S": "player.speed = 4.0",
+    "Shift+S*": "player.speed = 1.0",
     "S": "player.speed = 2.0",
     "S*": "player.speed = 1.0"
   }

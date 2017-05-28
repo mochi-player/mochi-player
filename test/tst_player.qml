@@ -6,7 +6,7 @@ import Mochi 1.0 as Mochi
 TestCase {
   id: test
   name: "PlayerTest"
-  property var testfiles: ["test1.webm", "test2.webm"]
+  property var testfiles: ["./test1.webm", "./test2.webm"]
   signal idle
   signal played
   signal stopped

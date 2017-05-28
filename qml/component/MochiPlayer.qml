@@ -31,6 +31,7 @@ Mochi.Player {
 
   volume: 100
   speed: 1.0
+  pos: 0
   subs: true
   debug: "status"
   playlistAutoShow: true

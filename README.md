@@ -12,4 +12,3 @@ cd build
 qmake-qt5 ..
 make -j $(grep -c '^processor' /proc/cpuinfo)
 ```
-

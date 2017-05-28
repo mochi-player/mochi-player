@@ -28,6 +28,7 @@ ApplicationWindow {
   property alias playlist: playlist
   property alias terminal: terminal
   property alias panel: panel
+  property alias seekbar: seekbar
   property alias showTerminal: terminal.visible
 
   minimumWidth: 550
@@ -140,6 +141,7 @@ ApplicationWindow {
         }
 
         MochiSeekbar {
+          id: seekbar
           Layout.fillWidth: true
           height: 5
           pos: player.pos ? (player.pos / 100.0) : 0

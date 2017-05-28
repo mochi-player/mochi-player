@@ -51,6 +51,7 @@ private:
   QJSEngine *engine;
 
   const int timerThreshold = 200;
+  const int refreshRate = 30;
   const int gestureThreshold = 15;
 
   struct ActiveGesture {
@@ -60,7 +61,8 @@ private:
     bool enabled;
     QString action;
     QPoint startPos;
-    QElapsedTimer timer;
+    QJSValue params;
+    QElapsedTimer timer, refreshTimer;
   };
   typedef QMap<Qt::MouseButton, ActiveGesture*> GestureMap;
   GestureMap activeGestures;

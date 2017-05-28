@@ -70,8 +70,10 @@ void Input::mousePressEvent(QMouseEvent *event) {
     if(event->button() == gesture.key()) {
       gesture.value()->startPos = event->globalPos();
       gesture.value()->action = QString();
+      gesture.value()->params = QJSValue();
       gesture.value()->enabled = true;
       gesture.value()->timer.start();
+      // TODO: flag for standard Dragging and don't wait for timerThreshold
     }
   }
 
@@ -88,19 +90,38 @@ void Input::mouseMoveEvent(QMouseEvent *event) {
       if(gesture.value()->timer.elapsed() > timerThreshold) {
         QPoint delta = event->globalPos() - gesture.value()->startPos;
         if(gesture.value()->action == QString()) {
-          if(abs(delta.x()) >= abs(delta.y()) + gestureThreshold)
-            gesture.value()->action = getMouseAction(
-                  gesture.value()->name+"HDrag");
-          else if(abs(delta.y()) >= abs(delta.x()) + gestureThreshold)
-            gesture.value()->action = getMouseAction(
-                  gesture.value()->name+"VDrag");
-          // TODO: DDrag
-
-          accept = gesture.value()->action != QString();
+          QString action_name = gesture.value()->name+"Drag";
+          gesture.value()->params =
+              engine->evaluate(getMouseAction(QString(action_name+"!"))).call(
+                QJSValueList({QJSValue(gesture.value()->startPos.x()),
+                              QJSValue(gesture.value()->startPos.y())}));
+          gesture.value()->action = getMouseAction(action_name);
+          if(gesture.value()->action == QString()) {
+            if(abs(delta.x()) >= abs(delta.y()) + gestureThreshold)
+              action_name = gesture.value()->name+"HDrag";
+            else if(abs(delta.y()) >= abs(delta.x()) + gestureThreshold)
+              action_name = gesture.value()->name+"VDrag";
+            else
+              continue; // TODO: DDrag
+            gesture.value()->params =
+                engine->evaluate(getMouseAction(QString(action_name+"!"))).call(
+                  QJSValueList({QJSValue(gesture.value()->startPos.x()),
+                                QJSValue(gesture.value()->startPos.y())}));
+            gesture.value()->action = getMouseAction(action_name);
+          }
+          if(gesture.value()->action != QString()) {
+            gesture.value()->refreshTimer.start();
+            accept = true;
+          }
         }
         else {
-          engine->evaluate(gesture.value()->action).call(
-              {(delta.x() << 1) + (delta.y() << 1)});
+          if(gesture.value()->refreshTimer.elapsed() > refreshRate) {
+            engine->evaluate(gesture.value()->action).call(
+                QJSValueList({QJSValue(delta.x()),
+                              QJSValue(delta.y()),
+                              gesture.value()->params}));
+            gesture.value()->refreshTimer.start();
+          }
           accept = true;
         }
       }
