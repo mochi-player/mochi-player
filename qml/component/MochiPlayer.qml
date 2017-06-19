@@ -48,4 +48,12 @@ Mochi.Player {
     "speed": player.speed,
     "sub-visibility": player.subs
   }
+
+
+  onPlayStateChanged: function(state) {
+    if(state == Mochi.Player.Stopped) {
+      if(app.clearOutputOnNewFile)
+        window.terminal.clear();
+    }
+  }
 }

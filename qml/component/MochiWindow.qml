@@ -12,7 +12,6 @@ ApplicationWindow {
   id: window
   objectName: "window"
 
-  property var app: parent
   property string icon: ":/logo.svg"
   property bool fullscreen: false
   property bool dimDialog: false
@@ -219,7 +218,9 @@ ApplicationWindow {
   function fit(percent) {
     app.fit(window,
             player.parent.childrenRect,
-            Qt.rect(0, 0, player.vWidth, player.vHeight),
+            Qt.rect(0, 0,
+                    player.vWidth || player.dWidth,
+                    player.vHeight || player.dHeight),
             percent || 0);
   }
 
@@ -230,13 +231,17 @@ ApplicationWindow {
     if(file in _dialogs)
       _dialogs[file].visible = true;
     else {
-      var dialog = Qt.createComponent('../dialog/%0.qml'.arg(file), window);
-      if(dialog.status == Component.Ready)
+      var dialog = Qt.createComponent('../dialog/%0.qml'.arg(file), app);
+      if(dialog.status == Component.Ready) {
         _dialogs[file] = dialog.createObject(window);
+        _dialogs[file].app = app.evaluate('app');
+      }
       else
         dialog.statusChanged.connect(function() {
-          if(dialog.status == Component.Ready)
+          if(dialog.status == Component.Ready) {
             _dialogs[file] = dialog.createObject(window);
+            _dialogs[file].app = app.evaluate('app');
+          }
           else if(dialog.status == Component.Error)
             console.log("Error loading component: ", dialog.errorString());
         });

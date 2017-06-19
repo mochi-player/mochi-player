@@ -17,33 +17,36 @@ Popup {
   ColumnLayout {
     id: menuBody
     CheckBox {
+      id: fullscreenCheckbox
       text: qsTr("Full Screen")
 
-      checked: window.fullscreen
-      onCheckedChanged: window.fullscreen = checked
-      Connections {
-          target: window
-          onFullscreenChanged: checked = window.fullscreen
+      TwoWayBinding {
+        leftItem: fullscreenCheckbox
+        rightItem: window
+        leftProp: 'checked'
+        rightProp: 'fullscreen'
       }
     }
     CheckBox {
+      id: dimCheckbox
       text: qsTr("Dim Desktop")
 
-      checked: window.dimDialog
-      onCheckedChanged: window.dimDialog = checked
-      Connections {
-          target: window
-          onFullscreenChanged: checked = window.dimDialog
+      TwoWayBinding {
+        leftItem: dimCheckbox
+        rightItem: window
+        leftProp: 'checked'
+        rightProp: 'dimDialog'
       }
     }
     CheckBox {
+      id: showCmdLineCheckbox
       text: qsTr("Show CMD Line")
 
-      checked: window.showCmdLine
-      onCheckedChanged: window.showCmdLine = checked
-      Connections {
-          target: window
-          onFullscreenChanged: checked = window.showCmdLine
+      TwoWayBinding {
+        leftItem: showCmdLineCheckbox
+        rightItem: window
+        leftProp: 'checked'
+        rightProp: 'showCmdLine'
       }
     }
     RowLayout {
@@ -72,13 +75,17 @@ Popup {
         model: player.videoTracks.map(_track_name)
         enabled: model.length > 1
 
-        currentIndex: player.vid-1
-        onCurrentIndexChanged: player.vid = vidCombo.currentIndex+1
-        Connections {
-            target: player
-            onSidChanged: vidCombo.currentIndex = player.vid-1
+        TwoWayBinding {
+          leftItem: vidCombo
+          rightItem: player
+          leftProp: 'currentIndex'
+          rightProp: 'vid'
+          leftVal: vidCombo.currentIndex + 1
+          rightVal: player.vid - 1
+          enabled: vidCombo.enabled
         }
       }
+
       Button { // TODO
         Image {
           anchors.centerIn: parent
@@ -96,11 +103,14 @@ Popup {
         text: qsTr("Audio")
         enabled: player.audioTracks.length
 
-        checked: !player.mute
-        onCheckedChanged: player.mute = !aidCheckbox.checked
-        Connections {
-            target: player
-            onSidChanged: aidCheckbox.checked = !player.mute
+        TwoWayBinding {
+          leftItem: aidCheckbox
+          rightItem: player
+          leftProp: 'checked'
+          rightProp: 'mute'
+          leftVal: !aidCheckbox.checked
+          rightVal: !player.mute
+          enabled: aidCheckbox.enabled
         }
       }
       ComboBox {
@@ -109,11 +119,14 @@ Popup {
         model: player.audioTracks.map(_track_name)
         enabled: model.length > 1 && !player.mute
 
-        currentIndex: player.aid-1
-        onCurrentIndexChanged: player.aid = aidCombo.currentIndex+1
-        Connections {
-            target: player
-            onSidChanged: aidCombo.currentIndex = player.aid-1
+        TwoWayBinding {
+          leftItem: aidCombo
+          rightItem: player
+          leftProp: 'currentIndex'
+          rightProp: 'aid'
+          leftVal: aidCombo.currentIndex + 1
+          rightVal: player.aid - 1
+          enabled: aidCombo.enabled
         }
       }
       Button { // TODO
@@ -133,11 +146,12 @@ Popup {
         text: qsTr("Subtitles")
         enabled: player.subtitleTracks.length
 
-        checked: player.subs
-        onCheckedChanged: player.subs = sidCheckbox.checked
-        Connections {
-            target: player
-            onSidChanged: sidCheckbox.checked = player.subs
+        TwoWayBinding {
+          leftItem: sidCheckbox
+          rightItem: player
+          leftProp: 'checked'
+          rightProp: 'subs'
+          enabled: sidCheckbox.enabled
         }
       }
       ComboBox {
@@ -146,11 +160,14 @@ Popup {
         model: player.subtitleTracks.map(_track_name)
         enabled: model.length > 1 && player.subs
 
-        currentIndex: player.sid-1
-        onCurrentIndexChanged: player.sid = sidCombo.currentIndex+1
-        Connections {
-            target: player
-            onSidChanged: sidCombo.currentIndex = player.sid-1
+        TwoWayBinding {
+          leftItem: sidCombo
+          rightItem: player
+          leftProp: 'currentIndex'
+          rightProp: 'sid'
+          leftVal: sidCombo.currentIndex + 1
+          rightVal: player.sid - 1
+          enabled: sidCombo.enabled
         }
       }
       Button {
@@ -165,7 +182,7 @@ Popup {
       Layout.fillWidth: true
 
       Label {
-        text: "Speed"
+        text: qsTr("Speed")
       }
       Button {
         Image {
@@ -197,7 +214,7 @@ Popup {
     }
     Button {
       Layout.fillWidth: true
-      text: "Take Screenshot..."
+      text: qsTr("Take Screenshot...")
       onClicked: {
         window.snapshotMode = true;
         close();
@@ -208,11 +225,11 @@ Popup {
       Layout.fillWidth: true
       Button {
         Layout.fillWidth: true
-        text: "Preferences..."
+        text: qsTr("Preferences...")
         onClicked: window.preferences()
       }
       Button {
-        text: "?"
+        text: qsTr("?")
         onClicked: window.about()
       }
     }

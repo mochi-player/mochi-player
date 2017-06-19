@@ -48,6 +48,8 @@ class Player : public PlayerEngine {
   M_PROPERTY_EX(int, vid, "vid")
   M_PROPERTY_EX(int, vWidth, "width")
   M_PROPERTY_EX(int, vHeight, "height")
+  M_PROPERTY_EX(int, dWidth, "dwidth")
+  M_PROPERTY_EX(int, dHeight, "dheight")
   M_PROPERTY_EX(QString, path, "path")
   M_PROPERTY_EX(QString, name, "filename/no-ext")
   M_PROPERTY_EX(QString, title, "media-title")

@@ -1,7 +1,8 @@
 TEMPLATE = app
 TARGET = test
 QT += testlib
-CONFIG += testcase qmltestcase c++11
+CONFIG += testcase qmltestcase c++11 console
+CONFIG -= app_bundle
 RESOURCES += $$PWD/test.qrc
 
 SOURCES += \

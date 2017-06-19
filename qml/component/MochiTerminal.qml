@@ -10,7 +10,7 @@ Item {
   property var completions: new Array()
   property alias terminalOutput: terminalOutput
   property string filter
-  property string type
+  property string type // TODO: type here should really be an Enum
 
   property string lastText
   property string lastType
@@ -171,7 +171,7 @@ Item {
       }
       ImageButton {
         source: "qrc:/cmd_save.svg"
-        onClicked: app.saveOutput(terminalOutput.text) // TODO
+        onClicked: app.saveOutput(terminalOutput.text)
       }
       ImageButton {
         source: "qrc:/cmd_help.svg"

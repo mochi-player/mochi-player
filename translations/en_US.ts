@@ -12,15 +12,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>blahblahblah</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Update Streaming Support</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mochi-player is a free and open source, cross-platform, libmpv based multimedia player. Its simple design reflects the idea for an uncluttered, simple, and enjoyable environment for watching tv shows.
+
+Copyright © 2017 godly-devotion, u8sand
+
+https://github.com/mochi-player/mochi-player</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -90,6 +90,22 @@
     </message>
     <message>
         <source>Subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Take Screenshot...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferences...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -193,10 +209,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tap and drag horizontally to seek.&lt;br&gt;Tap and drag vertically to control volume.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>mpv.conf</source>
         <translation type="unfinished"></translation>
     </message>
@@ -209,7 +221,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>mochi-player honors your mpv.conf except some values that it overrides itself.&lt;br&gt;Please see mpv DOCS for a list of commands.</source>
+        <source>Tap and drag horizontally to seek.
+Tap and drag vertically to control volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mochi-player honors your mpv.conf except some values that it overrides itself.
+Please see mpv DOCS for a list of commands.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

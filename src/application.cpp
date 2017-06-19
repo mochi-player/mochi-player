@@ -13,6 +13,8 @@
 #include <QFileInfo>
 #include <QTextStream>
 #include <QPointer>
+#include <QFile>
+#include <QFileDialog>
 
 // registered message_handler to send messages to the UI
 static QTextStream qStderr(stderr);
@@ -129,20 +131,20 @@ void Application::fit(QWindow *win, QRect current, QRect target, int percent) {
   // window geometry
   QRect wG = win->geometry();
   // available geometry we're in--(geometry not including the taskbar)
-  QRect aG = QApplication::desktop()->availableGeometry();
+  QRect aG = QApplication::desktop()->availableGeometry(wfG.center());
   // native video aspect ratio
-  double a = target.width() / target.height();
+  double a = double(target.width()) / target.height();
   // dimensions of the video we want
   double w, h;
 
   if(percent == 0) { // fit to window
     // set our current video element dimensions
-    w = current.width();
+    w = current.width(); // TODO: is current.width() mpvFrame geometry?
     h = current.height();
 
     // epsilon comparison, we consider -eps < 0 < eps ==> 0
     double cmp = w/h - a,
-        eps = 0.01;
+           eps = 0.01;
 
     if(cmp > eps) // too wide
       w = h * a; // width based height
@@ -186,6 +188,22 @@ void Application::fit(QWindow *win, QRect current, QRect target, int percent) {
   rect.setBottom(rect.bottom() - (wfG.bottom() - wG.bottom()));
 
   win->setGeometry(rect);
+}
+
+void Application::saveOutput(QString text) {
+  if(text.isEmpty())
+    return;
+  // TODO: Add date timestamp to dump file?
+  QString file = QFileDialog::getSaveFileName(nullptr,
+                                              tr("Choose output file"),
+                                              tr("mochi-dump.txt"),
+                                              tr("Text (*.txt)"));
+  if(file.isEmpty())
+    return;
+  QFile fh(file);
+  fh.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
+  fh.write(text.toUtf8());
+  fh.close();
 }
 
 QString Application::serializeTime(double pos, double duration) {

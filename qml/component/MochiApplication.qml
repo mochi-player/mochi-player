@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 1.4
 import Mochi 1.0 as Mochi
+import "../widget"
 
 Mochi.Application {
   id: app
@@ -19,6 +20,7 @@ Mochi.Application {
   splitter: 200
   hidePopup: true
   hideAllControls: false
+  clearOutputOnNewFile: false
   audioFiletypes: [
     "*.mp3", "*.ogg", "*.wav", "*.wma", "*.m4a", "*.aac",
     "*.ac3", "*.ape", "*.flac", "*.ra", "*.mka"]
@@ -43,18 +45,18 @@ Mochi.Application {
     title: player.title || "Mochi-Player"
     visible: true
 
-    width: app.width
-    onWidthChanged: app.width = window.width
-    Connections {
-        target: app
-        onWidthChanged: window.width = app.width
+    TwoWayBinding {
+      leftItem: app
+      rightItem: window
+      leftProp: 'width'
+      rightProp: 'width'
     }
 
-    height: app.height
-    onHeightChanged: app.height = window.height
-    Connections {
-        target: app
-        onHeightChanged: window.height = app.height
+    TwoWayBinding {
+      leftItem: app
+      rightItem: window
+      leftProp: 'height'
+      rightProp: 'height'
     }
   }
 

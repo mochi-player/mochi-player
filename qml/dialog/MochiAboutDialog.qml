@@ -7,8 +7,8 @@ import "../widget"
 
 Dialog {
   title: qsTr("About Mochi-Player")
-  width: 400
-  height: 200
+  width: 460
+  height: 300
 
   ColumnLayout {
     anchors.fill: parent
@@ -33,7 +33,15 @@ Dialog {
     TextArea {
       Layout.fillWidth: true
       Layout.fillHeight: true
-      text: qsTr("blahblahblah")
+      wrapMode: TextArea.Wrap
+      text: qsTr("mochi-player is a free and open source, cross-platform, "
+               + "libmpv based multimedia player. Its simple design reflects "
+               +  "the idea for an uncluttered, simple, and enjoyable "
+               + "environment for watching tv shows.\n"
+               + "\n"
+               + "Copyright © 2017 godly-devotion, u8sand\n"
+               + "\n"
+               + "https://github.com/mochi-player/mochi-player")
       readOnly: true
     }
     RowLayout {
@@ -41,11 +49,6 @@ Dialog {
       spacing: Style.spacing.margin
 
       Item { Layout.fillWidth: true }
-      Button {
-        text: qsTr("Update Streaming Support")
-//        onClicked: update.updateYoutubeDl()
-      }
-
       Button {
         text: qsTr("Close")
         onClicked: close()

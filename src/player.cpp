@@ -116,10 +116,14 @@ void Player::seek(double time, bool absolute) {
 
 void Player::frameStep() {
   command_async("frame-step");
+  if(!pause)
+    setProperty("pause", true);
 }
 
 void Player::frameBackStep() {
   command_async("frame-back-step");
+  if(!pause)
+    setProperty("pause", true);
 }
 
 void Player::screenshot() {

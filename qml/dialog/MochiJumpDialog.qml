@@ -6,6 +6,7 @@ import "../style"
 import "../widget"
 
 Dialog {
+  property alias app: parent.app
   property bool valid: h.value*60*60+m.value*60+s.value < player.duration
   width: 310
   height: 45

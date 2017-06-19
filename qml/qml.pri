@@ -8,10 +8,3 @@ lupdate_only {
     $$PWD/../qml/widget/*.qml
 }
 
-DISTFILES += \
-    $$PWD/widget/CheckBox.qml \
-    $$PWD/widget/ComboBox.qml \
-    $$PWD/widget/RadioButton.qml \
-    $$PWD/component/MochiRecent.qml \
-    $$PWD/component/MochiChapters.qml \
-    $$PWD/widget/MochiListView.qml

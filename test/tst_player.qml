@@ -11,6 +11,7 @@ TestCase {
   signal played
   signal stopped
   signal playlistLoaded
+  signal pathChanged
 
   ApplicationWindow {
     id: win
@@ -26,7 +27,7 @@ TestCase {
 
       onPlayStateChanged: function(state) {
         if(state == Mochi.Player.Failed)
-          test.fail("Test file couldn't be loaded");
+          test.warn("Test file couldn't be loaded");
         else if(state == Mochi.Player.Playing)
           test.played();
         else if(state == Mochi.Player.Stopped)
@@ -39,6 +40,8 @@ TestCase {
         if(playlist.length > 1)
           test.playlistLoaded();
       }
+
+      onPathChanged: test.pathChanged();
     }
   }
 
@@ -60,14 +63,33 @@ TestCase {
     signalName: "stopped"
   }
 
+  SignalSpy {
+    id: spy_path
+    target: test
+    signalName: "pathChanged"
+  }
+
+  SignalSpy {
+    id: spy_playlist_loaded
+    target: test
+    signalName: "playlistLoaded"
+  }
+
   function initTestCase() {
     spy_idle.wait();
     verify(spy_idle.count, "Mpv Initialized");
     spy_idle.clear();
   }
 
+  function cleanupTestCase() {
+    player.stop();
+    spy_idle.wait();
+    verify(spy_idle.count, "Mpv Initialized");
+    spy_idle.clear();
+  }
+
   function test_00_single_file() {
-    player.load(testfiles[0]);
+    player.load(testfiles[1]);
 
     spy_played.wait();
     verify(spy_played.count, "Test file loaded");
@@ -82,13 +104,9 @@ TestCase {
     spy_stopped.clear();
   }
 
-  SignalSpy {
-    id: spy_playlist_loaded
-    target: test
-    signalName: "playlistLoaded"
-  }
-
   function test_01_multi_file() {
+    // TODO: testfiles doesn't make it to player.play; it has something to do
+    //       with QVariantList handling
     player.load(testfiles);
 
     spy_playlist_loaded.wait();
@@ -97,5 +115,23 @@ TestCase {
 
     player.playlistPos += 1;
     tryCompare(player, "path", testfiles[1], 1000, "Next in playlist played");
+  }
+
+  function test_02_directory() {
+    player.load(".");
+
+    spy_playlist_loaded.wait();
+    verify(spy_playlist_loaded.count, "Directory playlist loaded");
+    spy_playlist_loaded.clear();
+
+    // TODO: this fails because the playlist loads a bunch of non-playable files
+    spy_path.wait();
+    spy_path.clear();
+    while(player.playlistPos < player.playlist.length && player.path != testfiles[0]) {
+      player.playlistPos += 1;
+      spy_path.wait();
+      spy_path.clear();
+    }
+    tryCompare(player, "path", testfiles[0], 1000, "File found in directory");
   }
 }

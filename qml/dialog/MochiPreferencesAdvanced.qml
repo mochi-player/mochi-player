@@ -20,13 +20,16 @@ ColumnLayout {
           text: qsTr("mpv output:")
         }
         ComboBox {
+          id: debugLevelsComboBox
           model: player.debugLevelsVerbose
 
-          currentIndex: player.debugLevels.indexOf(player.debug)
-          onCurrentIndexChanged: player.debug = player.debugLevels[currentIndex]
-          Connections {
-              target: player
-              onDebugChanged: currentIndex = player.debugLevels.indexOf(player.debug)
+          TwoWayBinding {
+            leftItem: debugLevelsComboBox
+            rightItem: player
+            leftProp: 'currentIndex'
+            rightProp: 'debug'
+            leftVal: player.debugLevels[debugLevelsComboBox.currentIndex]
+            rightVal: player.debugLevels.indexOf(player.debug)
           }
         }
         Item { height: Style.spacing.margin }
@@ -45,17 +48,21 @@ ColumnLayout {
 
       ColumnLayout {
         CheckBox {
+          id: gesturesCheckbox
           text: qsTr("Use Gestures")
 
-          checked: inputs.gestures
-          onCheckedChanged: inputs.gestures = checked
-          Connections {
-            target: inputs
-            onGesturesChanged: checked = input.gestures
+          TwoWayBinding {
+            leftItem: gesturesCheckbox
+            rightItem: inputs
+            leftProp: 'checked'
+            rightProp: 'gestures'
           }
         }
         Label {
-          text: qsTr("Tap and drag horizontally to seek.<br>Tap and drag vertically to control volume.")
+          // TODO: gestures are customizable, the below text just refers to the
+          //       default, should it say something else?
+          text: qsTr("Tap and drag horizontally to seek.\n"
+                   + "Tap and drag vertically to control volume.")
         }
       }
     }
@@ -74,7 +81,8 @@ ColumnLayout {
         }
       }
       Label {
-        text: qsTr("mochi-player honors your mpv.conf except some values that it overrides itself.<br>Please see mpv DOCS for a list of commands.")
+        text: qsTr("mochi-player honors your mpv.conf except some values that it overrides itself.\n"
+                 + "Please see mpv DOCS for a list of commands.")
       }
     }
   }

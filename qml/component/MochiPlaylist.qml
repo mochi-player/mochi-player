@@ -14,11 +14,12 @@ ColumnLayout {
     Layout.fillWidth: true
 
     list: player.playlist
-    listPos: player.playlistPos
-    onListPosChanged: player.playlistPos = listView.listPos
-    Connections {
-      target: player
-      onChapterChanged: if(listView.length > 0) { listView.listPos = player.playlistPos; }
+    TwoWayBinding {
+      leftItem: listView
+      rightItem: player
+      leftProp: 'listPos'
+      rightProp: 'playlistPos'
+      enabled: listView.list.length > 0
     }
   }
 
@@ -31,6 +32,8 @@ ColumnLayout {
 
       ImageButton {
         source: "qrc:/repeat_disabled.svg"
+        sourceSize.width: 18
+        sourceSize.height: 18
 //        TODO:
 //        source: {
 //          if(playlist.repeat == "")
@@ -50,6 +53,8 @@ ColumnLayout {
       Item { Layout.fillWidth: true }
       ImageButton {
         source: shuffle ? "qrc:/shuffle_enabled.svg" : "qrc:/shuffle_enabled.svg"
+        sourceSize.width: 18
+        sourceSize.height: 18
         onClicked: shuffle ^= true
       }
     }

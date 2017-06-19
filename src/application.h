@@ -27,6 +27,7 @@ class Application : public QQuickItem {
   M_PROPERTY(int, splitter, USER true)
   M_PROPERTY(bool, hidePopup, USER true)
   M_PROPERTY(bool, hideAllControls, USER true)
+  M_PROPERTY(bool, clearOutputOnNewFile, USER true)
   M_PROPERTY(int, width, USER true)
   M_PROPERTY(int, height, USER true)
 
@@ -64,6 +65,7 @@ protected slots:
 
   void setIcon(QWindow *window, QString icon);
   void fit(QWindow *window, QRect current, QRect target, int perc);
+  void saveOutput(QString text);
   QString serializeTime(double pos, double duration);
   QString serializeMedia(const QVariantMap &media);
   QString pwd();

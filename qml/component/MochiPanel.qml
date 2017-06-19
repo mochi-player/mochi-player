@@ -20,11 +20,11 @@ Rectangle {
     ImageButton {
       source: "qrc:/open.svg"
       onClicked: function(event) {
-        if(event.button == Qt.LeftButton)
+        if(event.button === Qt.LeftButton)
           window.open();
-        else if(event.button == Qt.RightButton)
+        else if(event.button === Qt.RightButton)
           window.openLocation();
-        else if(event.button == Qt.MiddleButton)
+        else if(event.button === Qt.MiddleButton)
           window.jump();
       }
     }

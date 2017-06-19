@@ -16,14 +16,17 @@ ColumnLayout {
     ColumnLayout {
       RowLayout {
         RadioButton {
+          id: autoFitRadioButton
           ButtonGroup.group: autoFit
           text: qsTr("Fit window to video dimensions:")
 
-          checked: app.autoFit != 0
-          onCheckedChanged: app.autoFit = checked ? 100 : 0
-          Connections {
-            target: app
-            onAutoFitChanged: checked = (app.autoFit != 0)
+          TwoWayBinding {
+            leftItem: autoFitRadioButton
+            rightItem: app
+            leftProp: 'checked'
+            rightProp: 'autoFit'
+            leftVal: autoFitRadioButton.checked ? fitDimCombo.model[fitDimCombo.currentIndex].split(0, -1) : 0
+            rightVal: app.autoFit != 0
           }
         }
         ComboBox {
@@ -31,22 +34,29 @@ ColumnLayout {
           model: ["25%", "50%", "75%", "100%", "150%", "200%"]
           enabled: app.autoFit != 0
 
-          currentIndex: model.indexOf(app.autoFit+"%")
-          onCurrentIndexChanged: app.autoFit = model[currentIndex].splice(0,-1)
-          Connections {
-            target: app
-            onAutoFitChanged: currentIndex = model.indexOf(app.autoFit+"%")
+          TwoWayBinding {
+            leftItem: fitDimCombo
+            rightItem: app
+            leftProp: 'currentIndex'
+            rightProp: 'autoFit'
+            leftVal: fitDimCombo.model[fitDimCombo.currentIndex].splice(0, -1)
+            rightVal: fitDimCombo.model.indexOf(app.autoFit+"%")
+            enabled: fitDimCombo.enabled
           }
         }
       }
       RadioButton {
+        id: rememberRadioButton
         ButtonGroup.group: autoFit
         text: qsTr("Remember previous window size")
 
-        checked: app.autoFit == 0
-        Connections {
-          target: app
-          onAutoFitChanged: checked = (app.autoFit == 0)
+        TwoWayBinding {
+          left: rememberRadioButton
+          right: app
+          leftProp: 'checked'
+          rightProp: 'autoFit'
+          leftVal: rememberRadioButton.checked ? 0 : null
+          rightVal: app.autoFit === 0
         }
       }
     }
@@ -58,14 +68,16 @@ ColumnLayout {
     ColumnLayout {
       RowLayout {
         CheckBox {
-          id: recent
+          id: recentCheckBox
           text: qsTr("Remember recently opened files up to")
 
-          checked: app.numRecent != 0
-          onCheckedChanged: if(!checked) app.numRecent = 0
-          Connections {
-            target: app
-            onNumRecentChanged: checked = (app.numRecent != 0)
+          TwoWayBinding {
+            leftItem: recentCheckBox
+            rightItem: app
+            leftProp: 'checked'
+            rightProp: 'numRecent'
+            leftVal: recentCheckBox.checked ? recentN.value : 0
+            rightVal: app.numRecent != 0
           }
         }
         MochiSpinBox {
@@ -73,22 +85,23 @@ ColumnLayout {
           maximumValue: 1000
           enabled: app.numRecent != 0
 
-          value: app.numRecent
-          onValueChanged: app.numRecent = value
-          Connections {
-            target: app
-            onNumRecentChanged: value = app.numRecent
+          TwoWayBinding {
+            leftItem: recentN
+            rightItem: app
+            leftProp: 'value'
+            rightProp: 'numRecent'
           }
         }
       }
       CheckBox {
+        id: rememberCheckBox
         text: qsTr("Remember playback position")
 
-        checked: app.resume
-        onCheckedChanged: app.resume = checked
-        Connections {
-          target: app
-          onResumeChanged: checked = app.resume
+        TwoWayBinding {
+          leftItem: rememberCheckBox
+          rightItem: app
+          leftProp: 'checked'
+          rightProp: 'resume'
         }
       }
     }
@@ -127,13 +140,16 @@ ColumnLayout {
       GroupBox {
         title: qsTr("Language")
         ComboBox {
+          id: languageComboBox
           model: app.langs
 
-          currentIndex: app.langs.indexOf(app.lang)
-          onCurrentIndexChanged: app.lang = app.langs[currentIndex]
-          Connections {
-            target: app
-            onLangChanged: currentIndex = app.langs.indexOf(app.lang)
+          TwoWayBinding {
+            leftItem: languageComboBox
+            rightItem: app
+            leftProp: 'currentIndex'
+            rightProp: 'lang'
+            leftVal: languageComboBox.model[languageComboBox.currentIndex]
+            rightVal: languageComboBox.model.indexOf(app.lang)
           }
         }
       }

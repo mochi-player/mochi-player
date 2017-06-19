@@ -42,5 +42,6 @@
         <file>widget/MochiSpinBox.qml</file>
         <file>widget/RadioButton.qml</file>
         <file>widget/RadioIndicator.qml</file>
+        <file>widget/TwoWayBinding.qml</file>
     </qresource>
 </RCC>

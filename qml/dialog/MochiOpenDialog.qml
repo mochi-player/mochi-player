@@ -4,6 +4,7 @@ import QtQuick.Dialogs 1.2
 
 FileDialog {
   id: openDialog
+  property var app
 
   title: qsTr("Open File(s)...")
   visible: true
@@ -17,12 +18,12 @@ FileDialog {
 
   onVisibleChanged: {
     if(openDialog.visible) {
-      if(player.path != "")
-        openDialog.folder = player.path;
+      if(app.player.path != "")
+        openDialog.folder = app.player.path;
       else
         openDialog.folder = app.pwd();
     }
   }
 
-  onAccepted: player.load(openDialog.fileUrls);
+  onAccepted: app.player.load(openDialog.fileUrls);
 }
