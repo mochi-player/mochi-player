@@ -7,10 +7,17 @@ Item {
   id: self
 
   property QtObject state
+  property QtObject action
 
   TwoWayConnection {
     left: tray; leftProp: 'visible'
     right: state.tray; rightProp: 'visible'
+  }
+
+  Connections {
+    target: action.tray
+    onShow: tray.show()
+    onHide: tray.hide()
   }
 
   Labs.SystemTrayIcon {

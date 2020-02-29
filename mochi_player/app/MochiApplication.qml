@@ -2,16 +2,31 @@ import QtQuick 2.0
 import Qt.labs.platform 1.1 as Labs
 
 MochiApplicationWindow {
-  id: window
+  id: self
+
   state: state
+  action: action
 
   MochiApplicationState {
     id: state
+  }
+
+  MochiApplicationAction {
+    id: action
+  }
+
+  MochiUI {
+    id: ui
+    state: state
+    action: action
+
+    anchors.fill: parent
   }
 
   // TODO: Use a loader and only load if visible = true
   MochiSystemTray {
     id: tray
     state: state
+    action: action
   }
 }

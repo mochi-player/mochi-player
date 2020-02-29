@@ -5,7 +5,9 @@ import "../components/two_way_connection"
 ApplicationWindow {
   id: self
   property QtObject state
+  property QtObject action
 
+  // Preserve State
   TwoWayConnection {
     left: self; leftProp: 'title'
     right: state.window; rightProp: 'title'
@@ -21,5 +23,12 @@ ApplicationWindow {
   TwoWayConnection {
     left: self; leftProp: 'visible'
     right: state.window; rightProp: 'visible'
+  }
+
+  // Handle actions
+  Connections {
+    target: action.window
+    onShow: self.show()
+    onHide: self.hide()
   }
 }
