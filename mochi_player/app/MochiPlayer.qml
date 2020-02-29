@@ -28,5 +28,8 @@ Item {
         mpv.command(['loadfile', paths.toString(), 'append-play'])
       }
     }
+    onPlayPause: {
+      mpv.command(['cycle', 'pause'])
+    }
   }
 }

@@ -23,6 +23,12 @@ MochiApplicationWindow {
     anchors.fill: parent
   }
 
+  MochiInput {
+    id: input
+    state: state
+    action: action
+  }
+
   // TODO: Use a loader and only load if visible = true
   MochiSystemTray {
     id: tray

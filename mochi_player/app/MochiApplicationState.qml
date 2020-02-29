@@ -13,4 +13,8 @@ QtObject {
   property QtObject tray: QtObject {
     property bool visible: true
   }
+
+  property QtObject input: QtObject {
+    property var shortcuts: []
+  }
 }

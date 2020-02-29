@@ -10,6 +10,7 @@ QtObject {
 
   property QtObject player: QtObject {
     signal load(var file)
+    signal playPause()
   }
 
   property QtObject tray: QtObject {
