@@ -15,18 +15,23 @@ QtObject {
   property var rightHandler
   onRightChanged: self._reconnect()
 
+  property bool enabled: true
+  onEnabledChanged: self._reconnect()
+
   property var _connections: []
 
   function _reconnect() {
-    var left = self.left
-    if (left === undefined) { return }
-    var right = self.right
-    if (right === undefined) { return }
-
     // Clear old connections
     while (self._connections.length > 0) {
       self._connections.pop().destroy()
     }
+
+    var left = self.left
+    if (left === undefined) { return }
+    var right = self.right
+    if (right === undefined) { return }
+    var enabled = self.enabled
+    if (enabled !== true) { return }
 
     var leftProp = self.leftProp
     if (left[leftProp] === undefined) { throw new Error(`TwoWayBinding: missing leftProp (${leftProp})`) }
