@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.7
 import MpvPlayer 1.0
 import "../components/two_way_connection"
 
@@ -47,6 +47,12 @@ Item {
         mpv.command(['loadfile', paths.toString(), 'append-play'])
       }
     }
+  }
+
+  // we'll only pay attention to these actions when loaded
+  Connections {
+    target: self.action.player
+    enabled: mpv.path !== ""
     onPlayPause: {
       mpv.pause = !mpv.pause
     }
