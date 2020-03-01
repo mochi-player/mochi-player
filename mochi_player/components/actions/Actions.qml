@@ -51,13 +51,15 @@ Item {
     // Map all shortcuts to existing
     //  or new actions.
 
-    for (var shortcut of self.shortcuts) {
-      if (typeof _actions[shortcut.objectName] !== 'undefined') {
-        console.debug(`overriding action ${shortcut.objectName}...`)
-        Object.assign(_actions[shortcut.objectName], shortcut)
-      } else {
-        console.debug(`creating action ${shortcut.objectName}...`)
-        _actions[shortcut.objectName] = self._actionComponent.createObject(self, shortcut)
+    if (Array.isArray(self.shortcuts)) {
+      for (var shortcut of self.shortcuts) {
+        if (typeof _actions[shortcut.objectName] !== 'undefined') {
+          console.debug(`overriding action ${shortcut.objectName}...`)
+          Object.assign(_actions[shortcut.objectName], shortcut)
+        } else {
+          console.debug(`creating action ${shortcut.objectName}...`)
+          _actions[shortcut.objectName] = self._actionComponent.createObject(self, shortcut)
+        }
       }
     }
 
