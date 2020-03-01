@@ -39,5 +39,6 @@ class MpvPlayer(MpvObject, metaclass=MetaMpvPlayer):
   def handlePropertyChange(self, data):
     prop = data.name
     value = data.data
-    setattr(self, _get_private(prop), value)
-    getattr(self, _get_notify(prop)).emit()
+    if value is not None:
+      setattr(self, _get_private(prop), value)
+      getattr(self, _get_notify(prop)).emit()

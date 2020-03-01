@@ -24,14 +24,16 @@ def _getter_factory(prop):
   getter.__name__ = private_prop
   return getter
 
-def _setter_factory(prop):
+def _setter_factory(prop, typ):
   private_prop = _get_private(prop)
   prop_notify = _get_notify(prop)
   def setter(self, value):
-    if getattr(self, private_prop) != value:
-      setattr(self, private_prop, value)
-      self.mpv.set_property(prop, value, asynchronous=True)
-      getattr(self, prop_notify).emit()
+    if value is not None:
+      value = typ(value)
+      if getattr(self, private_prop) != value:
+        setattr(self, private_prop, value)
+        self.mpv.set_property(prop, value, asynchronous=True)
+        getattr(self, prop_notify).emit()
   return setter
 
 def MetaMpvPlayer(name, bases, attrs):
@@ -42,7 +44,7 @@ def MetaMpvPlayer(name, bases, attrs):
     prop = pyqtProperty(
       typ,
       fget=_getter_factory(prop_name),
-      fset=_setter_factory(prop_name),
+      fset=_setter_factory(prop_name, typ),
       notify=prop_notify,
     )
     attrs[_pythonify(prop_name)] = prop
