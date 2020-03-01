@@ -7,8 +7,8 @@ Action {
   //  e.g. a tag of `file` will appear in the file menu group.
   property var tags: []
 
-  property string action
+  property var action
   onTriggered: {
-    if (action) eval(action)
+    if (action) action()
   }
 }

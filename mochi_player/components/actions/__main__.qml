@@ -16,13 +16,13 @@ ApplicationWindow {
         objectName: 'a',
         text: 'a',
         shortcut: 'C',
-        action: `console.log('a.shortcut')`,
+        action: function () { console.log('a.shortcut') },
       },
       {
         objectName: 'd',
         text: 'd',
         shortcut: 'D',
-        action: `console.log('d.shortcut')`,
+        action: function () { console.log('d.shortcut') },
       },
     ]
 
