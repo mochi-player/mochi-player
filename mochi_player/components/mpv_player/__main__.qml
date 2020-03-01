@@ -1,9 +1,10 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.5
-import MpvObject 1.0
+import MpvPlayer 1.0
 
 ApplicationWindow {
-  title: 'mpv_object test'
+  id: window
+  title: 'player test'
   width: 500
   height: 500
   visible: true
@@ -11,7 +12,7 @@ ApplicationWindow {
   Item {
     anchors.fill: parent
 
-    MpvObject {
+    MpvPlayer {
       id: player
       anchors.fill: parent
       width: 0
@@ -27,6 +28,8 @@ ApplicationWindow {
           player.command(['loadfile', paths.toString(), 'append-play'])
         }
       }
+
+      onMediaTitleChanged: { window.title = player.mediaTitle }
     }
 
     Rectangle {
@@ -54,21 +57,40 @@ ApplicationWindow {
             Drag file in to load"
       }
 
-      Row {
-        Button {
-          anchors.margins: 10
-          text: "Prev"
-          onClicked: player.command(["cycle", "playlist-pos", "down"])
+      Column {
+        Row {
+          Button {
+            anchors.margins: 10
+            text: "Prev"
+            onClicked: player.command(["cycle", "playlist-pos", "down"])
+          }
+          Button {
+            anchors.margins: 10
+            text: "PlayPause"
+            onClicked: player.command(["cycle", "pause"])
+          }
+          Button {
+            anchors.margins: 10
+            text: "Next"
+            onClicked: player.command(["cycle", "playlist-pos", "up"])
+          }
         }
-        Button {
-          anchors.margins: 10
-          text: "PlayPause"
-          onClicked: player.command(["cycle", "pause"])
-        }
-        Button {
-          anchors.margins: 10
-          text: "Next"
-          onClicked: player.command(["cycle", "playlist-pos", "up"])
+        Row {
+          Button {
+            anchors.margins: 10
+            text: "Mute"
+            onClicked: player.mute = !player.mute
+          }
+          Button {
+            anchors.margins: 10
+            text: "Volume " + player.volume + " Down"
+            onClicked: player.volume = Math.max(player.volume - 10, 0)
+          }
+          Button {
+            anchors.margins: 10
+            text: "Volume " + player.volume + " Up"
+            onClicked: player.volume = Math.min(player.volume + 10, 100)
+          }
         }
       }
     }

@@ -1,4 +1,7 @@
-# Ported to python from https://github.com/mpv-player/mpv-examples/blob/master/libmpv/qml_direct/main.cpp
+''' Ported to python from https://github.com/mpv-player/mpv-examples/blob/master/libmpv/qml_direct/main.cpp
+
+Handle initializing the mpv GL context and using it for drawing this QObject.
+'''
 
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtGui import QOpenGLContext

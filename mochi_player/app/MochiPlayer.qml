@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import MpvObject 1.0
+import MpvPlayer 1.0
 
 Item {
   id: self
@@ -7,7 +7,7 @@ Item {
   property QtObject state
   property QtObject action
 
-  MpvObject {
+  MpvPlayer {
     id: mpv
 
     anchors.fill: parent

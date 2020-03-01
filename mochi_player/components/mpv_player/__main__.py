@@ -4,7 +4,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
-from . import MpvObject
+from . import MpvPlayer
 
 app = QGuiApplication(sys.argv)
 

@@ -1,4 +1,7 @@
-# Ported to python from https://github.com/mpv-player/mpv-examples/blob/master/libmpv/qml_direct/main.cpp
+''' Ported to python from https://github.com/mpv-player/mpv-examples/blob/master/libmpv/qml_direct/main.cpp
+
+Handle constructing an Mpv context for a QQuickItem for use in QML
+'''
 
 import mpv as pympv
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
@@ -7,6 +10,10 @@ from .MpvRenderer import MpvRenderer
 
 class MpvObject(QQuickItem):
   on_update = pyqtSignal()
+  on_wakeup = pyqtSignal()
+
+  # Dict<event.id, Set<Function<Event.data>>>
+  event_handlers = {}
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
@@ -24,6 +31,8 @@ class MpvObject(QQuickItem):
     self.mpv.set_option('msg-level', 'all=v')
     #
     self.mpv.initialize()
+    self.mpv.set_wakeup_callback(self.on_wakeup.emit)
+    self.on_wakeup.connect(self.do_wakeup, Qt.QueuedConnection)
     #
     self.mpv.set_option('vo', 'opengl-cb')
     #
@@ -66,15 +75,27 @@ class MpvObject(QQuickItem):
       self.render = None
 
   @pyqtSlot()
-  def do_update(self):
-    self.window().update()
-
-  @pyqtSlot()
   def reinitRenderer(self):
     self.mpv.set_option('stop-playback-on-init-failure', 'no')
     self.killOnce = True
     self.window().update()
 
-  @pyqtSlot('QStringList')
-  def command(self, params):
-    self.mpv.command(*params)
+  @pyqtSlot()
+  def requestEvent(self, event_id, event_callback):
+    if self.event_handlers.get(event_id) is None:
+      self.mpv.request_event(event_id, True)
+      self.event_handlers[event_id] = set()
+    self.event_handlers[event_id].add(event_callback)
+
+  @pyqtSlot()
+  def do_update(self):
+    self.window().update()
+
+  @pyqtSlot()
+  def do_wakeup(self):
+    while True:
+      event = self.mpv.wait_event(0.01)
+      if event.id == pympv.Events.none:
+        break
+      for event_handler in self.event_handlers.get(event.id, set()):
+        event_handler(event.data)
