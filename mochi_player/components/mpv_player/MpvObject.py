@@ -5,10 +5,10 @@ Handle constructing an Mpv context for a QQuickItem for use in QML
 
 import mpv as pympv
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtQuick import QQuickItem
+from PyQt5.QtQuick import QQuickFramebufferObject
 from .MpvRenderer import MpvRenderer
 
-class MpvObject(QQuickItem):
+class MpvObject(QQuickFramebufferObject):
   on_update = pyqtSignal()
   on_wakeup = pyqtSignal()
 
@@ -18,7 +18,6 @@ class MpvObject(QQuickItem):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     #
-    self.renderer = None
     self.killOnce = False
     #
     import locale
@@ -29,6 +28,7 @@ class MpvObject(QQuickItem):
     #
     self.mpv.set_option('terminal', 'yes')
     self.mpv.set_option('msg-level', 'all=v')
+    self.mpv.set_option('hr-seek', 'always')
     #
     self.mpv.initialize()
     self.mpv.set_wakeup_callback(self.on_wakeup.emit)
@@ -36,49 +36,14 @@ class MpvObject(QQuickItem):
     #
     self.mpv.set_option('vo', 'opengl-cb')
     #
-    self.mpv_gl = self.mpv.opengl_cb_api()
-    self.mpv_gl.set_update_callback(self.on_update.emit)
-    self.on_update.connect(self.do_update, Qt.QueuedConnection)
+    self.mpv_gl = None
+
+  @pyqtSlot()
+  def createRenderer(self):
+    self.window().setPersistentOpenGLContext(True)
+    self.window().setPersistentSceneGraph(True)
     #
-    self.windowChanged.connect(self.handleWindowChanged)
-
-  @pyqtSlot()
-  def handleWindowChanged(self):
-    win = self.window()
-    if not win:
-      return
-    win.beforeSynchronizing.connect(self.sync, Qt.DirectConnection)
-    win.sceneGraphInvalidated.connect(self.cleanup, Qt.DirectConnection)
-    win.frameSwapped.connect(self.swapped, Qt.DirectConnection)
-    win.setClearBeforeRendering(False)
-
-  @pyqtSlot()
-  def sync(self):
-    if self.killOnce:
-      self.cleanup()
-    self.killOnce = False
-    #
-    if not self.renderer:
-      self.renderer = MpvRenderer(self.mpv, self.mpv_gl)
-      self.window().beforeRendering.connect(self.renderer.paint, Qt.DirectConnection)
-    #
-    self.renderer.window = self.window()
-    self.renderer.size = self.window().size() * self.window().devicePixelRatio()
-
-  @pyqtSlot()
-  def swapped(self):
-    self.mpv_gl.report_flip(0)
-
-  @pyqtSlot()
-  def cleanup(self):
-    if self.renderer:
-      self.render = None
-
-  @pyqtSlot()
-  def reinitRenderer(self):
-    self.mpv.set_option('stop-playback-on-init-failure', 'no')
-    self.killOnce = True
-    self.window().update()
+    return MpvRenderer(self)
 
   @pyqtSlot()
   def requestEvent(self, event_id, event_callback):
@@ -88,10 +53,6 @@ class MpvObject(QQuickItem):
     self.event_handlers[event_id].add(event_callback)
 
   @pyqtSlot()
-  def do_update(self):
-    self.window().update()
-
-  @pyqtSlot()
   def do_wakeup(self):
     while True:
       event = self.mpv.wait_event(0.01)
@@ -99,3 +60,7 @@ class MpvObject(QQuickItem):
         break
       for event_handler in self.event_handlers.get(event.id, set()):
         event_handler(event.data)
+
+  @pyqtSlot()
+  def do_update(self):
+    self.update()

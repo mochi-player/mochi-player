@@ -3,7 +3,8 @@
 Handle initializing the mpv GL context and using it for drawing this QObject.
 '''
 
-from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtCore import Qt, QObject, pyqtSlot, pyqtSignal
+from PyQt5.QtQuick import QQuickFramebufferObject
 from PyQt5.QtGui import QOpenGLContext
 
 def get_proc_address(name):
@@ -12,17 +13,29 @@ def get_proc_address(name):
     return 0
   return int(glctx.getProcAddress(name))
 
-class MpvRenderer(QObject):
-  def __init__(self, a_mpv, a_mpv_gl, *args, **kwargs):
+class MpvRenderer(QQuickFramebufferObject.Renderer):
+  def __init__(self, obj, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    self.mpv = a_mpv
-    self.mpv_gl = a_mpv_gl
-    self.mpv_gl.init_gl(None, get_proc_address)
-    self.window = None
+    self.obj = obj
 
   @pyqtSlot()
-  def paint(self):
-    if self.window:
-      self.window.resetOpenGLState()
-      self.mpv_gl.draw(0, self.size.width(), -self.size.height())
-      self.window.resetOpenGLState()
+  def createFramebufferObject(self, size):
+    if self.obj.mpv_gl is None:
+      self.obj.mpv_gl = self.obj.mpv.opengl_cb_api()
+      self.obj.mpv_gl.set_update_callback(self.obj.on_update.emit)
+      self.obj.on_update.connect(self.obj.do_update, Qt.QueuedConnection)
+      self.obj.mpv_gl.init_gl(None, get_proc_address)
+    #
+    return super().createFramebufferObject(size)
+
+  @pyqtSlot()
+  def render(self):
+    win = self.obj.window()
+    win.resetOpenGLState()
+    fbo = self.framebufferObject()
+    self.obj.mpv_gl.draw(
+      fbo.handle(),
+      fbo.width(),
+      fbo.height()
+    )
+    win.resetOpenGLState()

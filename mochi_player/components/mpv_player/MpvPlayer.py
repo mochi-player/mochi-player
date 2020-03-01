@@ -13,12 +13,15 @@ class MpvPlayer(MpvObject, metaclass=MetaMpvPlayer):
   # mpv --list-properties
   mpv_properties = {
     'chapter': int,
+    'dheight': int,
     'duration': float,
+    'dwidth': int,
     'filename': str,
     'media-title': str,
     'mute': bool,
     'path': str,
     'pause': bool,
+    'seeking': bool,
     'speed': float,
     'time-pos': float,
     'volume': int,
