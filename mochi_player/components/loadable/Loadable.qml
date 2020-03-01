@@ -15,6 +15,8 @@ Item {
 
   Loader {
     id: loader
+    asynchronous: true
+    visible: status == Loader.Ready
     anchors.fill: parent
   }
 
@@ -47,6 +49,7 @@ Item {
           }
         )
       )
+      self.item[_prop] = self.props[_prop]
     }
   }
 
@@ -79,6 +82,7 @@ Item {
           }
         )
       )
+      self.exports[_export] = self.item[_export]
     }
   }
 

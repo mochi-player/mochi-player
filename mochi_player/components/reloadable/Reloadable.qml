@@ -16,8 +16,6 @@ Item {
 
   Loadable {
     id: loadable
-    asynchronous: true
-    visible: status == Loader.Ready
     anchors.fill: parent
   }
 
