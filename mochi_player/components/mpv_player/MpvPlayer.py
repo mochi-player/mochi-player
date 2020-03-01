@@ -12,14 +12,16 @@ from .MetaMpvPlayer import MetaMpvPlayer, _pythonify, _get_private, _get_notify
 class MpvPlayer(MpvObject, metaclass=MetaMpvPlayer):
   # mpv --list-properties
   mpv_properties = {
-    'mute': bool,
-    'volume': int,
+    'chapter': int,
+    'duration': float,
     'filename': str,
     'media-title': str,
+    'mute': bool,
     'path': str,
     'pause': bool,
     'speed': float,
-    'chapter': int,
+    'time-pos': float,
+    'volume': int,
   }
 
   def __init__(self, *args, **kwargs):
