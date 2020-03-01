@@ -56,12 +56,11 @@ Item {
     anchors.left: self.left
     anchors.right: self.right
     anchors.bottom: self.bottom
-    anchors.topMargin: 10
-    anchors.bottomMargin: 10
     height: 12
 
     played: playerTimePos
     buffered: Math.min(playerTimePos + 0.1, 1.0)
+    // TODO: ticks based on chapters
     ticks: [0.15, 0.35, 0.55, 0.85]
   }
 

@@ -66,7 +66,7 @@ Item {
       action: self.action
 
       Layout.fillWidth: true
-      height: 25
+      height: 45
     }
   }
 
