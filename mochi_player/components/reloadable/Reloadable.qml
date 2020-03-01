@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import FileSystemWatcher 1.0
 import ReloadableEngine 1.0
+import "../loadable"
 
 Item {
   id: self
@@ -8,11 +9,13 @@ Item {
   property string source
   property string module: ""
 
-  property alias item: loader.item
-  property alias status: loader.status
+  property alias item: loadable.item
+  property alias status: loadable.status
+  property alias props: loadable.props
+  property alias exports: loadable.exports
 
-  Loader {
-    id: loader
+  Loadable {
+    id: loadable
     asynchronous: true
     visible: status == Loader.Ready
     anchors.fill: parent
@@ -38,7 +41,7 @@ Item {
   // Reload the qml component and (potentially) the python component
   function reload(withModule) {
     console.log(`[re]loading ${self.source}`)
-    loader.source = ""
+    loadable.source = ""
     ReloadableEngine.clearComponentCache()
     if (withModule && self.module !== "") {
       console.log(`[re]loading ${self.module}`)
@@ -46,7 +49,7 @@ Item {
         return
       }
     }
-    loader.source = self.source
+    loadable.source = self.source
   }
 
   Component.onCompleted: reload(true)
