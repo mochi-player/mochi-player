@@ -24,10 +24,10 @@ ApplicationWindow {
         Layout.fillHeight: true
 
         TwoWayConnection {
-          left: inputTitle1
-          leftProp: 'text'
-          right: window
-          rightProp: 'title'
+          left: inputTitle1; right: window
+          props: [
+            { leftProp: 'text', rightProp: 'title' },
+          ]
         }
       }
 
@@ -38,10 +38,10 @@ ApplicationWindow {
         Layout.fillHeight: true
 
         TwoWayConnection {
-          left: inputTitle2
-          leftProp: 'text'
-          right: window
-          rightProp: 'title'
+          left: inputTitle2; right: window
+          props: [
+            { leftProp: 'text', rightProp: 'title' },
+          ]
         }
       }
     }
@@ -57,16 +57,19 @@ ApplicationWindow {
         Layout.fillHeight: true
 
         TwoWayConnection {
-          left: inputWidth
-          leftProp: 'text'
-          leftHandler: function (leftVal) {
-            return Number(leftVal)
-          }
-          right: window
-          rightProp: 'width'
-          rightHandler: function (rightVal) {
-            return String(rightVal)
-          }
+          left: inputWidth; right: window
+          props: [
+            {
+              leftProp: 'text',
+              leftHandler: function (leftVal) {
+                return Number(leftVal)
+              },
+              rightProp: 'width',
+              rightHandler: function (rightVal) {
+                return String(rightVal)
+              },
+            }
+          ]
         }
       }
 
@@ -77,16 +80,19 @@ ApplicationWindow {
         Layout.fillHeight: true
 
         TwoWayConnection {
-          left: inputHeight
-          leftProp: 'text'
-          leftHandler: function (leftVal) {
-            return Number(leftVal)
-          }
-          right: window
-          rightProp: 'height'
-          rightHandler: function (rightVal) {
-            return String(rightVal)
-          }
+          left: inputHeight; right: window
+          props: [
+            {
+              leftProp: 'text',
+              leftHandler: function (leftVal) {
+                return Number(leftVal)
+              },
+              rightProp: 'height',
+              rightHandler: function (rightVal) {
+                return String(rightVal)
+              },
+            }
+          ]
         }
       }
     }

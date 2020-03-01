@@ -16,56 +16,22 @@ Item {
 
   // Sync player state with application state
   TwoWayConnection {
-    left: mpv; leftProp: 'chapter'
-    right: state.player; rightProp: 'chapter'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'dheight'
-    right: state.player; rightProp: 'dheight'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'duration'
-    right: state.player; rightProp: 'duration'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'dwidth'
-    right: state.player; rightProp: 'dwidth'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'filename'
-    right: state.player; rightProp: 'filename'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'mediaTitle'
-    right: state.player; rightProp: 'mediaTitle'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'mute'
-    right: state.player; rightProp: 'mute'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'path'
-    right: state.player; rightProp: 'path'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'pause'
-    right: state.player; rightProp: 'pause'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'seeking'
-    right: state.player; rightProp: 'seeking'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'speed'
-    right: state.player; rightProp: 'speed'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'timePos'
-    right: state.player; rightProp: 'timePos'
-  }
-  TwoWayConnection {
-    left: mpv; leftProp: 'volume'
-    right: state.player; rightProp: 'volume'
+    left: mpv; right: self.state.player
+    props: [
+      { leftProp: 'chapter', rightProp: 'chapter' },
+      { leftProp: 'dheight', rightProp: 'dheight' },
+      { leftProp: 'duration', rightProp: 'duration' },
+      { leftProp: 'dwidth', rightProp: 'dwidth' },
+      { leftProp: 'filename', rightProp: 'filename' },
+      { leftProp: 'mediaTitle', rightProp: 'mediaTitle' },
+      { leftProp: 'mute', rightProp: 'mute' },
+      { leftProp: 'path', rightProp: 'path' },
+      { leftProp: 'pause', rightProp: 'pause' },
+      { leftProp: 'seeking', rightProp: 'seeking' },
+      { leftProp: 'speed', rightProp: 'speed' },
+      { leftProp: 'timePos', rightProp: 'timePos' },
+      { leftProp: 'volume', rightProp: 'volume' },
+    ]
   }
 
   // Handle player actions

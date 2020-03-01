@@ -10,12 +10,14 @@ Item {
   property QtObject action
 
   TwoWayConnection {
-    left: tray; leftProp: 'visible'
-    right: state.tray; rightProp: 'visible'
+    left: tray; right: self.state.tray
+    props: [
+      { leftProp: 'visible', rightProp: 'visible' },
+    ]
   }
 
   Connections {
-    target: action.tray
+    target: self.action.tray
     onShow: tray.show()
     onHide: tray.hide()
   }

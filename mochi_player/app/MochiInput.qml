@@ -18,7 +18,9 @@ Item {
   }
 
   TwoWayConnection {
-    left: self.input; leftProp: 'shortcuts'
-    right: self.state.input; rightProp: 'shortcuts'
+    left: self.input; right: self.state.input
+    props: [
+      { leftProp: 'shortcuts', rightProp: 'shortcuts' },
+    ]
   }
 }

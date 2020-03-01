@@ -9,20 +9,13 @@ ApplicationWindow {
 
   // Preserve State
   TwoWayConnection {
-    left: self; leftProp: 'title'
-    right: state.window; rightProp: 'title'
-  }
-  TwoWayConnection {
-    left: self; leftProp: 'width'
-    right: state.window; rightProp: 'width'
-  }
-  TwoWayConnection {
-    left: self; leftProp: 'height'
-    right: state.window; rightProp: 'height'
-  }
-  TwoWayConnection {
-    left: self; leftProp: 'visible'
-    right: state.window; rightProp: 'visible'
+    left: self; right: self.state.window
+    props: [
+      { leftProp: 'title', rightProp: 'title' },
+      { leftProp: 'width', rightProp: 'width' },
+      { leftProp: 'height', rightProp: 'height' },
+      { leftProp: 'visible', rightProp: 'visible' },
+    ]
   }
 
   // Handle actions
