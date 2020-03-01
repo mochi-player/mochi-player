@@ -11,6 +11,9 @@ QtObject {
   property QtObject player: QtObject {
     signal load(var file)
     signal playPause()
+    signal seekAbsolute(double timePos)
+    signal seekRelative(double timePos)
+    signal adjustVolume(double volume)
   }
 
   property QtObject tray: QtObject {

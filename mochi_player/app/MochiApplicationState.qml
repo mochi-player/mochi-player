@@ -19,15 +19,18 @@ QtObject {
   }
 
   property QtObject player: QtObject {
-    property bool mute: false
-    property bool pause: true
     property int chapter: 0
-    property int volume: 50
-    property real duration: 0
-    property real speed: 1.0
-    property real timePos: 0
+    property int dheight: 0
+    property double duration: 0
+    property int dwidth: 0
     property string filename: ''
     property string mediaTitle: ''
+    property bool mute: false
     property string path: ''
+    property bool pause: true
+    property bool seeking: false
+    property double speed: 1.0
+    property double timePos: 0
+    property int volume: 50
   }
 }

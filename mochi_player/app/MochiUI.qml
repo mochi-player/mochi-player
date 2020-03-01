@@ -30,6 +30,14 @@ Item {
 
           Layout.fillWidth: true
           Layout.fillHeight: true
+
+          MochiGestureArea {
+            id: gestureArea
+            state: self.state
+            action: self.action
+
+            anchors.fill: player
+          }
         }
 
         MochiTerminal {

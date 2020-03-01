@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 DropArea {
   id: self
-
+  z: 10
   property QtObject state
   property QtObject action
 

@@ -1,17 +1,14 @@
 import QtQuick 2.0
 
-Rectangle {
+Item {
   id: self
-
   property QtObject state
   property QtObject action
 
-  color: "black"
+  MochiSeekbar {
+    state: self.state
+    action: self.action
 
-  Text {
-    anchors.centerIn: parent
-
-    color: "white"
-    text: "panel goes here"
+    anchors.fill: parent 
   }
 }

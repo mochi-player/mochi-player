@@ -6,7 +6,10 @@ logging.basicConfig(level=logging.DEBUG)
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQml import QQmlApplicationEngine
 
-from mochi_player.components import mpv_player
+from mochi_player.components import (
+  gesture_area,
+  mpv_player,
+)
 
 # app = QGuiApplication(sys.argv)
 app = QApplication(sys.argv)

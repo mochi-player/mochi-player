@@ -11,11 +11,7 @@ Item {
   // Actual Mpv engine
   MpvPlayer {
     id: mpv
-
     anchors.fill: parent
-
-    width: 0
-    height: 0
   }
 
   // Sync player state with application state
@@ -24,8 +20,16 @@ Item {
     right: state.player; rightProp: 'chapter'
   }
   TwoWayConnection {
+    left: mpv; leftProp: 'dheight'
+    right: state.player; rightProp: 'dheight'
+  }
+  TwoWayConnection {
     left: mpv; leftProp: 'duration'
     right: state.player; rightProp: 'duration'
+  }
+  TwoWayConnection {
+    left: mpv; leftProp: 'dwidth'
+    right: state.player; rightProp: 'dwidth'
   }
   TwoWayConnection {
     left: mpv; leftProp: 'filename'
@@ -46,6 +50,10 @@ Item {
   TwoWayConnection {
     left: mpv; leftProp: 'pause'
     right: state.player; rightProp: 'pause'
+  }
+  TwoWayConnection {
+    left: mpv; leftProp: 'seeking'
+    right: state.player; rightProp: 'seeking'
   }
   TwoWayConnection {
     left: mpv; leftProp: 'speed'
@@ -74,7 +82,27 @@ Item {
       }
     }
     onPlayPause: {
-      mpv.command(['cycle', 'pause'])
+      mpv.pause = !mpv.pause
+    }
+    onSeekAbsolute: function (timePos) {
+      if (!mpv.seeking) {
+        var dt = timePos - mpv.timePos
+        if (dt > 0) {
+          mpv.command(['seek', `+${dt}`])
+        } else {
+          mpv.command(['seek', `${dt}`])
+        }
+      }
+    }
+    onSeekRelative: function (dt) {
+      if (dt > 0) {
+        mpv.command(['seek', `+${dt}`])
+      } else {
+        mpv.command(['seek', `${dt}`])
+      }
+    }
+    onAdjustVolume: function (dv) {
+      mpv.volume = Math.min(Math.max(mpv.volume + dv, 0), 100)
     }
   }
 }
