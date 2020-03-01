@@ -14,10 +14,6 @@ QtObject {
     property bool visible: true
   }
 
-  property QtObject input: QtObject {
-    property var shortcuts: []
-  }
-
   property QtObject player: QtObject {
     property int chapter: 0
     property int dheight: 0
@@ -32,5 +28,23 @@ QtObject {
     property double speed: 1.0
     property double timePos: 0
     property int volume: 50
+  }
+
+  property QtObject input: QtObject {
+    property var keys: {
+      ' ': 'action.player.playPause()',
+    }
+    property var mouse: {
+      'wheelUp': 'action.player.adjustVolume(5)',
+      'wheelDown': 'action.player.adjustVolume(-5)',
+      'leftClick': undefined,
+      'middleClick': undefined,
+      'rightClick': 'action.player.playPause()',
+      'leftDoubleClick': 'action.window.fullscreen()',
+      'middleDoubleClick': undefined,
+      'rightDoubleClick': undefined,
+      'leftVDrag': 'function (val) { action.player.adjustVolume(-val * 100) }',
+      'leftHDrag': 'function (val) { action.player.seekRelative(val * state.player.duration / 10) }',
+    }
   }
 }
