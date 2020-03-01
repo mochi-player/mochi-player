@@ -17,4 +17,17 @@ QtObject {
   property QtObject input: QtObject {
     property var shortcuts: []
   }
+
+  property QtObject player: QtObject {
+    property bool mute: false
+    property bool pause: true
+    property int chapter: 0
+    property int volume: 50
+    property real duration: 0
+    property real speed: 1.0
+    property real timePos: 0
+    property string filename: ''
+    property string mediaTitle: ''
+    property string path: ''
+  }
 }
