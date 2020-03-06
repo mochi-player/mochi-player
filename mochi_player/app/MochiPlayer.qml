@@ -18,6 +18,7 @@ Item {
   TwoWayConnection {
     left: mpv; right: self.state.player
     props: [
+      { leftProp: 'chapterList', rightProp: 'chapterList' },
       { leftProp: 'chapter', rightProp: 'chapter' },
       { leftProp: 'dheight', rightProp: 'dheight' },
       { leftProp: 'duration', rightProp: 'duration' },
@@ -27,9 +28,14 @@ Item {
       { leftProp: 'mute', rightProp: 'mute' },
       { leftProp: 'path', rightProp: 'path' },
       { leftProp: 'pause', rightProp: 'pause' },
+      { leftProp: 'playlistPos', rightProp: 'playlistPos' },
+      { leftProp: 'playlist', rightProp: 'playlist' },
       { leftProp: 'seeking', rightProp: 'seeking' },
       { leftProp: 'speed', rightProp: 'speed' },
+      { leftProp: 'subScale', rightProp: 'subScale' },
+      { leftProp: 'subVisibility', rightProp: 'subVisibility' },
       { leftProp: 'timePos', rightProp: 'timePos' },
+      { leftProp: 'trackList', rightProp: 'trackList' },
       { leftProp: 'volume', rightProp: 'volume' },
     ]
   }
@@ -53,8 +59,33 @@ Item {
   Connections {
     target: self.action.player
     enabled: mpv.path !== ""
+
     onPlayPause: {
-      mpv.pause = !mpv.pause
+      mpv.command(['cycle', 'pause'])
+    }
+    onPlayPrev: {
+      mpv.command(['playlist-prev'])
+    }
+    onPlayNext: {
+      mpv.command(['playlist-next'])
+    }
+    onToggleSubtitles: {
+      mpv.command(['cycle', 'sub-visibility'])
+    }
+    onTakeScreenshot: {
+      mpv.command(['screenshot'])
+    }
+    onFrameStep: {
+      mpv.command(['frame-step'])
+    }
+    onFrameBackStep: {
+      mpv.command(['frame-back-step'])
+    }
+    onToggleMute: {
+      mpv.command(['cycle', 'mute'])
+    }
+    onSetSpeed: function (s) {
+      mpv.command(['set', 'speed', s])
     }
     onSeekAbsolute: function (timePos) {
       if (!mpv.seeking) {

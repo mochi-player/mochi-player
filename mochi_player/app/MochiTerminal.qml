@@ -6,12 +6,12 @@ Rectangle {
   property QtObject state
   property QtObject action
 
-  color: "black"
+  color: self.state.ui.style.color.background
 
   Text {
     anchors.centerIn: parent
 
-    color: "white"
+    color: self.state.ui.style.color.foreground
     text: "terminal goes here"
   }
 }

@@ -14,13 +14,14 @@ Item {
   Rectangle {
     id: preview
 
-    color: '#aaffffff'
+    color: self.state.ui.style.color.primary
     width: 150
     height: 150
     visible: previewVisible
     border.width: 1
-    border.color: '#00000000'
+    border.color: self.state.ui.style.color.background
     radius: 5
+    opacity: 0.8
 
     x: _minmax(
       Math.floor(previewTimePos * seekbar.width - (preview.width / 2)),
@@ -49,26 +50,26 @@ Item {
     }
   }
 
-
   Seekbar {
     id: seekbar
 
     anchors.left: self.left
     anchors.right: self.right
     anchors.bottom: self.bottom
-    height: 12
+    height: 6
 
     played: playerTimePos
-    buffered: Math.min(playerTimePos + 0.1, 1.0)
-    // TODO: ticks based on chapters
-    ticks: [0.15, 0.35, 0.55, 0.85]
+    buffered: Math.min(playerTimePos + 0.01, 1.0)
+    ticks: self.state.player.chapterList.map(function (chapter) {
+      chapter.time / self.state.player.duration
+    })
   }
 
   MouseArea {
     id: mouseArea
     anchors.fill: seekbar
-    anchors.topMargin: -20
-    anchors.bottomMargin: -20
+    anchors.topMargin: -6
+    anchors.bottomMargin: -6
     acceptedButtons: Qt.LeftButton
 
     hoverEnabled: true
