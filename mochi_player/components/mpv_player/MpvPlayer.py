@@ -12,6 +12,7 @@ from .MetaMpvPlayer import MetaMpvPlayer, _pythonify, _get_private, _get_notify
 class MpvPlayer(MpvObject, metaclass=MetaMpvPlayer):
   # mpv --list-properties
   mpv_properties = {
+    'chapter-list': list,
     'chapter': int,
     'dheight': int,
     'duration': float,
@@ -21,9 +22,14 @@ class MpvPlayer(MpvObject, metaclass=MetaMpvPlayer):
     'mute': bool,
     'path': str,
     'pause': bool,
+    'playlist-pos': int,
+    'playlist': list,
     'seeking': bool,
     'speed': float,
+    'sub-scale': float,
+    'sub-visibility': bool,
     'time-pos': float,
+    'track-list': list,
     'volume': int,
   }
 

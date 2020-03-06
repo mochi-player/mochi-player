@@ -32,7 +32,8 @@ def _setter_factory(prop, typ):
       value = typ(value)
       if getattr(self, private_prop) != value:
         setattr(self, private_prop, value)
-        self.mpv.set_property(prop, value, asynchronous=True)
+        if typ not in {list, dict}: # readonly
+          self.mpv.set_property(prop, value, asynchronous=True)
         getattr(self, prop_notify).emit()
   return setter
 
